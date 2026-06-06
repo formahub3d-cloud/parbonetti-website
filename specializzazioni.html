@@ -236,7 +236,7 @@
       <div class="video-card fade-in">
         <div class="video-embed-wrap">
           <iframe
-            src="https://www.youtube.com/embed/2kDxqU3r5P0"
+            data-consent-src="https://www.youtube.com/embed/2kDxqU3r5P0"
             title="Intervista Dott. Giovanni Parbonetti"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
@@ -253,7 +253,7 @@
       <div class="video-card fade-in">
         <div class="video-embed-wrap">
           <iframe
-            src="https://www.youtube.com/embed/sJx5Y4NkDFw"
+            data-consent-src="https://www.youtube.com/embed/sJx5Y4NkDFw"
             title="In Salute – Giovanni Parbonetti, Direttore Neurochirurgia"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
@@ -270,7 +270,7 @@
       <div class="video-card fade-in">
         <div class="video-embed-wrap">
           <iframe
-            src="https://www.youtube.com/embed/NoMPLWmN9pc"
+            data-consent-src="https://www.youtube.com/embed/NoMPLWmN9pc"
             title="San Luca – Concorso Primario Neurochirurgia"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
@@ -428,8 +428,9 @@
     <div class="footer-bottom">
       <span>© 2025 Dott. Giovanni Parbonetti – P.IVA 01757220627 – Tutti i diritti riservati</span>
       <div class="footer-bottom-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Cookie Policy</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="cookie.html">Cookie Policy</a>
+        <a href="#" data-cookie-prefs>Preferenze cookie</a>
       </div>
     </div>
   </div>
@@ -449,5 +450,6 @@ hamburger.addEventListener('click', () => { hamburger.classList.toggle('open'); 
 document.querySelectorAll('.mobile-menu a').forEach(a => { a.addEventListener('click', () => { hamburger.classList.remove('open'); mobileMenu.classList.remove('open'); }); });
 </script>
 <script src="animations.js"></script>
+<script src="consent.js"></script>
 </body>
 </html>

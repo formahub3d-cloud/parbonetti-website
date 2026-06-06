@@ -144,7 +144,7 @@
     </div>
     <div class="map-wrap fade-in">
       <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3018.2!2d14.7761!3d41.1309!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x133a4e1c3c7a1a1b%3A0x5a2f0d9b4c8e0a2b!2sAORN+San+Pio%2C+Via+dell&#39;Angelo%2C+Benevento+BN!5e0!3m2!1sit!2sit!4v1699999999999!5m2!1sit!2sit"
+        data-consent-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3018.2!2d14.7761!3d41.1309!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x133a4e1c3c7a1a1b%3A0x5a2f0d9b4c8e0a2b!2sAORN+San+Pio%2C+Via+dell&#39;Angelo%2C+Benevento+BN!5e0!3m2!1sit!2sit!4v1699999999999!5m2!1sit!2sit"
         title="AORN San Pio – Presidio Rummo, Benevento"
         allowfullscreen
         loading="lazy"
@@ -200,7 +200,7 @@
             <div class="checkbox-group">
               <input type="checkbox" id="privacy" name="privacy" required />
               <label for="privacy">
-                Ho letto e accetto la <a href="#">Privacy Policy</a>. Acconsento al trattamento dei miei dati personali ai sensi del GDPR (Regolamento UE 2016/679) per essere ricontattato riguardo alla richiesta. *
+                Ho letto e accetto la <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>. Acconsento al trattamento dei miei dati personali ai sensi del GDPR (Regolamento UE 2016/679) per essere ricontattato riguardo alla richiesta. *
               </label>
             </div>
           </div>
@@ -305,8 +305,9 @@
     <div class="footer-bottom">
       <span>© 2025 Dott. Giovanni Parbonetti – P.IVA 01757220627 – Tutti i diritti riservati</span>
       <div class="footer-bottom-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Cookie Policy</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="cookie.html">Cookie Policy</a>
+        <a href="#" data-cookie-prefs>Preferenze cookie</a>
       </div>
     </div>
   </div>
@@ -353,5 +354,6 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
 });
 </script>
 <script src="animations.js"></script>
+<script src="consent.js"></script>
 </body>
 </html>
