@@ -1,7 +1,7 @@
-# Non includere nell'immagine (e quindi non servire pubblicamente) i file interni
+# Non includere nell'immagine (e quindi non servire pubblicamente) i file interni.
+# NB: il Caddyfile NON va escluso — serve al Dockerfile per "COPY Caddyfile".
 .git
 .gitignore
 .dockerignore
 Dockerfile
-Caddyfile
 *.md
