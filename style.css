@@ -983,7 +983,7 @@ ul { list-style: none; }
 
 /* ---------- LOGO MORPH SCROLL SCENE ---------- */
 .morph-scene {
-  height: 300vh;
+  height: 230vh;
   position: relative;
 }
 .morph-inner {
@@ -991,7 +991,10 @@ ul { list-style: none; }
   height: 100vh;
   overflow: hidden;
   display: flex; align-items: center; justify-content: center;
-  background: var(--dark);
+  background:
+    radial-gradient(120% 90% at 50% 38%, rgba(46,109,180,0.28) 0%, rgba(10,31,60,0) 55%),
+    radial-gradient(90% 80% at 50% 100%, rgba(91,168,90,0.22) 0%, rgba(10,31,60,0) 55%),
+    var(--dark);
 }
 .morph-circle {
   position: absolute;
@@ -1023,18 +1026,21 @@ ul { list-style: none; }
   line-height: 1.1; margin-bottom: 14px;
   opacity: 0;
 }
+.morph-line1, .morph-line2,
+.morph-photo-frame, .morph-mini-stats .ms { will-change: transform, opacity; }
 .morph-line2 {
   font-size: clamp(0.82rem, 1.5vw, 1rem);
   color: rgba(255,255,255,0.60);
   letter-spacing: 0.06em; text-transform: uppercase;
-  margin-bottom: 40px; opacity: 0;
+  margin-bottom: 32px; opacity: 0;
 }
 .morph-photo-frame {
-  width: 200px; height: 256px;
+  width: 248px; height: 312px;
   border-radius: var(--radius-lg);
   background: rgba(255,255,255,0.07);
   border: 1.5px solid rgba(255,255,255,0.15);
-  margin: 0 auto 28px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.40);
+  margin: 0 auto 26px;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   gap: 12px; color: rgba(255,255,255,0.38);
@@ -1064,7 +1070,7 @@ ul { list-style: none; }
   .hero-doctor-photo { height: 320px; }
   .hero-photo-badge { width: 64px; height: 64px; bottom: -12px; right: -12px; padding: 8px; }
   .morph-logo-big { width: 120px; }
-  .morph-photo-frame { width: 150px; height: 196px; }
+  .morph-photo-frame { width: 188px; height: 236px; margin-bottom: 22px; }
   .morph-mini-stats { gap: 20px; }
   .morph-mini-stats .ms strong { font-size: 1.4rem; }
 }

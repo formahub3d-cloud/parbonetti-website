@@ -52,50 +52,58 @@
     const photo  = scene.querySelector('.morph-photo-frame');
     const stats  = scene.querySelectorAll('.morph-mini-stats .ms');
 
-    /* Fase 1 – logo si espande e cerchio riempie lo schermo */
+    /* Fase 1 – logo si espande e cerchio riempie lo schermo (rapida) */
     if (logo) {
-      const lp = prog(p, 0, 0.42);
-      logo.style.transform = `scale(${lerp(1, 8, easeInQuad(lp))})`;
+      const lp = prog(p, 0, 0.28);
+      logo.style.transform = `scale(${lerp(1, 7, easeInQuad(lp))})`;
       logo.style.opacity   = String(lerp(1, 0, lp));
     }
     if (circle) {
-      const cp = prog(p, 0, 0.46);
+      const cp = prog(p, 0, 0.30);
       circle.style.transform = `scale(${lerp(0, 30, easeInQuad(cp))})`;
       circle.style.opacity   = String(lerp(0, 1, cp));
     }
 
-    /* Fase 2 – testo appare */
+    /* Fase 2 – testo appare subito dopo il riempimento */
     if (line1) {
-      const lp = prog(p, 0.40, 0.62);
+      const lp = prog(p, 0.24, 0.40);
       line1.style.opacity   = String(lp);
-      line1.style.transform = `translateY(${lerp(44, 0, lp)}px)`;
+      line1.style.transform = `translateY(${lerp(40, 0, lp)}px)`;
     }
     if (line2) {
-      const lp = prog(p, 0.50, 0.70);
+      const lp = prog(p, 0.30, 0.46);
       line2.style.opacity   = String(lp);
-      line2.style.transform = `translateY(${lerp(22, 0, lp)}px)`;
+      line2.style.transform = `translateY(${lerp(20, 0, lp)}px)`;
     }
 
-    /* Fase 3 – foto e statistiche */
+    /* Fase 3 – foto e statistiche, in rapida successione (riempiono lo schermo) */
     if (photo) {
-      const lp = prog(p, 0.60, 0.80);
+      const lp = prog(p, 0.38, 0.56);
       photo.style.opacity   = String(lp);
-      photo.style.transform = `scale(${lerp(0.9, 1, lp)})`;
+      photo.style.transform = `scale(${lerp(0.92, 1, lp)})`;
     }
     stats.forEach(function (st, i) {
-      const lp = prog(p, 0.72 + i * 0.04, 0.92 + i * 0.02);
+      const lp = prog(p, 0.50 + i * 0.05, 0.66 + i * 0.04);
       st.style.opacity   = String(lp);
       st.style.transform = `translateY(${lerp(14, 0, lp)}px)`;
     });
+    /* Dalla fase ~0.74 in poi la composizione resta piena fino a fine scena. */
   }
 
-  /* ─── SCROLL HANDLER ───────────────────────────────────────────────── */
+  /* ─── SCROLL HANDLER (throttle con requestAnimationFrame) ──────────── */
+  var ticking = false;
   function onScroll() {
-    updateProgress();
-    updateNavbar();
-    if (!noMotion) updateMorph();
+    if (ticking) { return; }
+    ticking = true;
+    requestAnimationFrame(function () {
+      updateProgress();
+      updateNavbar();
+      if (!noMotion) updateMorph();
+      ticking = false;
+    });
   }
   window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
 
   /* ─── INTERSECTION OBSERVER – SCROLL REVEALS ───────────────────────── */
   if (!noMotion) {
