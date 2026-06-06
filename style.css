@@ -3,8 +3,9 @@
    Stylesheet principale
    ============================================ */
 
-/* ---------- IMPORT FONT ---------- */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+/* ---------- FONT ----------
+   I font sono caricati nel <head> delle pagine HTML con preconnect
+   (più veloce dell'@import, che è render-blocking). */
 
 /* ---------- CSS VARIABLES ---------- */
 :root {
