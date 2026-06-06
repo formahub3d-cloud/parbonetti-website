@@ -1,0 +1,7 @@
+# Non includere nell'immagine (e quindi non servire pubblicamente) i file interni
+.git
+.gitignore
+.dockerignore
+Dockerfile
+Caddyfile
+*.md

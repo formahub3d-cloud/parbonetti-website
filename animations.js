@@ -165,7 +165,7 @@
       counterObs.unobserve(entry.target);
       var el     = entry.target;
       var target = +el.dataset.target;
-      var suffix = el.dataset.suffix || '+';
+      var suffix = (el.dataset.suffix != null) ? el.dataset.suffix : '+';
       var start  = performance.now();
       var dur    = 1800;
       function tick(now) {
