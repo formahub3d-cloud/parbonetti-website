@@ -137,27 +137,115 @@
   </div>
 </section>
 
-<!-- ======== LOGO MORPH SCROLL SCENE ======== -->
-<section class="morph-scene" aria-hidden="true">
-  <div class="morph-inner">
-    <!-- Cerchio gradiente che si espande -->
-    <div class="morph-circle"></div>
-    <!-- Logo che cresce -->
-    <img src="PHOTO-2025-06-05-13-00-34.jpg" class="morph-logo-big" alt="" loading="lazy" decoding="async" />
-    <!-- Contenuto che appare dopo la trasformazione -->
-    <div class="morph-content">
-      <p class="morph-line1">Neurochirurgia<br>d'Eccellenza</p>
-      <p class="morph-line2">AORN San Pio · Benevento · Punto di riferimento Nazionale</p>
-      <div class="morph-photo-frame">
-        <img src="PHOTO-2025-05-21-15-43-56.jpg" alt="Dott. Giovanni Parbonetti" loading="lazy" decoding="async" />
-      </div>
-      <div class="morph-mini-stats">
-        <div class="ms"><strong>800+</strong><span>Interventi/Anno</span></div>
-        <div class="ms"><strong>17</strong><span>Specializzazioni</span></div>
-        <div class="ms"><strong>1°</strong><span>in Italia</span></div>
+<!-- ======== SCENA CERVELLO NEURALE (scroll) ======== -->
+<section class="neuro-scene" id="neuroScene">
+  <div class="neuro-sticky">
+    <canvas id="neuroCanvas" aria-hidden="true"></canvas>
+    <div class="neuro-vignette" aria-hidden="true"></div>
+    <div class="neuro-overlay">
+      <p class="neuro-eyebrow" id="nEyebrow">Il sistema nervoso, in ogni dettaglio</p>
+      <h2 class="neuro-title" id="nTitle">Neurochirurgia <span>d'Eccellenza</span></h2>
+      <p class="neuro-sub" id="nSub">Tecnologie di ultima generazione al servizio del cervello e della colonna vertebrale. Un riferimento nazionale per la neurochirurgia.</p>
+      <div class="neuro-stats">
+        <div class="neuro-stat" id="nStat0"><b>800+</b><span>Interventi ogni anno</span></div>
+        <div class="neuro-stat" id="nStat1"><b>15+</b><span>Aree di specializzazione</span></div>
+        <div class="neuro-stat" id="nStat2"><b>20+</b><span>Anni di esperienza</span></div>
       </div>
     </div>
   </div>
+  <style>
+    .neuro-scene{position:relative;height:280vh;background:#07142b;}
+    .neuro-sticky{position:sticky;top:0;height:100vh;overflow:hidden;}
+    #neuroCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+    .neuro-vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 60% at 50% 42%,transparent 42%,rgba(4,11,26,.6) 100%);}
+    .neuro-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 8vw;pointer-events:none;}
+    .neuro-eyebrow{font-family:'Montserrat',sans-serif;font-weight:600;letter-spacing:5px;text-transform:uppercase;font-size:.72rem;color:var(--green);opacity:0;transform:translateY(20px);}
+    .neuro-title{font-family:'Montserrat',sans-serif;font-weight:800;line-height:1.02;letter-spacing:-1px;font-size:clamp(2.1rem,6vw,4.4rem);margin-top:14px;max-width:14ch;color:#fff;opacity:0;transform:translateY(30px);text-shadow:0 6px 40px rgba(4,11,26,.6);}
+    .neuro-title span{color:var(--green);}
+    .neuro-sub{margin-top:20px;font-size:clamp(.95rem,1.6vw,1.15rem);color:rgba(255,255,255,.72);max-width:36ch;opacity:0;transform:translateY(24px);}
+    .neuro-stats{display:flex;gap:38px;margin-top:40px;flex-wrap:wrap;}
+    .neuro-stat{opacity:0;transform:translateY(20px);}
+    .neuro-stat b{font-family:'Montserrat',sans-serif;font-weight:800;font-size:clamp(1.7rem,3vw,2.4rem);background:linear-gradient(90deg,var(--blue),var(--green));-webkit-background-clip:text;background-clip:text;color:transparent;display:block;}
+    .neuro-stat span{font-size:.8rem;color:rgba(255,255,255,.55);letter-spacing:.5px;}
+    @media (max-width:640px){.neuro-scene{height:220vh;}.neuro-overlay{justify-content:flex-end;padding:0 7vw 14vh;}.neuro-stats{gap:22px;}}
+  </style>
+  <script>
+  (function(){
+    var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var cv=document.getElementById('neuroCanvas'); if(!cv) return;
+    var ctx=cv.getContext('2d'), scene=document.getElementById('neuroScene');
+    var DPR=Math.min(window.devicePixelRatio||1,2), W=0,H=0,CX=0,CY=0,SC=1;
+    function measure(){var r=cv.getBoundingClientRect();W=r.width;H=r.height;if(W<2||H<2)return false;
+      cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0);
+      CX=W*0.5;CY=H*0.4;SC=Math.min(W,H)*0.2;return true;}
+    function rnd(a,b){return a+Math.random()*(b-a);}
+    var P=[];
+    function hemi(sign,n,col){for(var i=0;i<n;i++){var u=Math.random(),v=Math.random();
+      var th=2*Math.PI*u,ph=Math.acos(2*v-1);
+      var x=Math.sin(ph)*Math.cos(th),y=Math.cos(ph),z=Math.sin(ph)*Math.sin(th);
+      var f=1+0.10*Math.sin(x*7+y*5)*Math.sin(z*6-y*4)+0.05*Math.sin(y*13+z*3);
+      var px=x*1.02*f,py=y*0.92*f,pz=z*1.12*f;
+      px=sign*(0.42+Math.abs(px)*0.62);py=py*0.98+0.05;
+      var d=Math.random()<0.35?rnd(0.72,0.97):1;px*=d;py*=d;pz*=d;
+      var s=0.55+0.45*Math.random();
+      P.push({bx:px,by:py,bz:pz,sx:rnd(-6,6),sy:rnd(-6,6),sz:rnd(-6,6),r:col[0]*s|0,g:col[1]*s|0,b:col[2]*s|0,z2:rnd(0.9,2)});}}
+    function spine(){var top=0.9,bot=3.4,V=22;for(var i=0;i<=V;i++){var t=i/V;
+      var cy=top+t*(bot-top),cx=0.02+0.30*Math.sin(t*Math.PI*1.15),cz=0.05*Math.sin(t*6);
+      var ring=12+Math.round((1-t)*6),rad=0.30-0.10*t;
+      for(var k=0;k<ring;k++){var a=2*Math.PI*k/ring,sh=0.6+0.4*Math.random();
+        P.push({bx:cx+Math.cos(a)*rad,by:cy,bz:cz+Math.sin(a)*rad*0.85,sx:rnd(-6,6),sy:rnd(-6,6),sz:rnd(-6,6),r:175*sh|0,g:215*sh|0,b:255*sh|0,z2:rnd(0.9,1.7),cord:false});}
+      P.push({bx:cx,by:cy,bz:cz,sx:rnd(-6,6),sy:rnd(-6,6),sz:rnd(-6,6),r:150,g:210,b:255,z2:rnd(1.4,2.3),cord:true});}}
+    hemi(-1,780,[70,150,230]);hemi(1,780,[110,205,120]);spine();
+    var neu=[];for(var i=0;i<P.length;i+=13)neu.push(P[i]);
+    var links=[];for(var a=0;a<neu.length;a++){var b1=-1,d1=9,b2=-1,d2=9;
+      for(var b=0;b<neu.length;b++){if(a==b)continue;var dx=neu[a].bx-neu[b].bx,dy=neu[a].by-neu[b].by,dz=neu[a].bz-neu[b].bz,dd=dx*dx+dy*dy+dz*dz;
+        if(dd<d1){d2=d1;b2=b1;d1=dd;b1=b;}else if(dd<d2){d2=dd;b2=b;}}
+      if(b1>=0&&d1<0.85)links.push([neu[a],neu[b1]]);if(b2>=0&&d2<0.85&&Math.random()<0.6)links.push([neu[a],neu[b2]]);}
+    var cord=P.filter(function(p){return p.cord;}).sort(function(a,b){return a.by-b.by;});
+    var sig=[];for(var s=0;s<10;s++)sig.push({l:links[(Math.random()*links.length)|0],t:Math.random(),v:rnd(0.006,0.015)});
+    var csig=[];for(var c=0;c<4;c++)csig.push({t:Math.random(),v:rnd(0.002,0.004)});
+    function lerp(a,b,t){return a+(b-a)*t;}
+    function clamp01(v){return Math.max(0,Math.min(1,v));}
+    function easeOut(t){return 1-Math.pow(1-t,3);}
+    function seg(p,a,b){return clamp01((p-a)/(b-a));}
+    var progress=0;
+    function computeProgress(){var r=scene.getBoundingClientRect(),total=scene.offsetHeight-window.innerHeight;progress=total>0?clamp01(-r.top/total):0;}
+    function ov(id,v){var el=document.getElementById(id);if(el){el.style.opacity=v;el.style.transform='translateY('+((1-v)*22)+'px)';}}
+    function overlay(){ov('nEyebrow',seg(progress,0.05,0.16));ov('nTitle',seg(progress,0.10,0.24));ov('nSub',seg(progress,0.18,0.34));ov('nStat0',seg(progress,0.30,0.42));ov('nStat1',seg(progress,0.36,0.48));ov('nStat2',seg(progress,0.42,0.54));}
+    function glow(x,y,r,c){var g=ctx.createRadialGradient(x,y,0,x,y,r*3.5);g.addColorStop(0,'rgba('+c+',.9)');g.addColorStop(.4,'rgba('+c+',.4)');g.addColorStop(1,'rgba('+c+',0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r*3.5,0,6.283);ctx.fill();}
+    var t0=performance.now();
+    function frame(now){
+      if(!measure()){if(!reduce)requestAnimationFrame(frame);return;}
+      var tm=(now-t0)/1000;
+      var asm=reduce?1:easeOut(clamp01(progress/0.5));
+      var rY=reduce?0.5:((progress-0.5)*1.7+tm*0.11), rX=-0.17+Math.sin(tm*0.25)*0.05;
+      var cY=Math.cos(rY),sY=Math.sin(rY),cX=Math.cos(rX),sX=Math.sin(rX);
+      ctx.clearRect(0,0,W,H);
+      var bg=ctx.createRadialGradient(CX,CY,0,CX,CY,Math.max(W,H)*0.6);bg.addColorStop(0,'rgba(20,48,92,.35)');bg.addColorStop(1,'rgba(7,20,43,0)');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+      ctx.globalCompositeOperation='lighter';
+      for(var i=0;i<P.length;i++){var p=P[i];
+        var bx=lerp(p.sx,p.bx,asm),by=lerp(p.sy,p.by,asm),bz=lerp(p.sz,p.bz,asm);
+        var x1=bx*cY-bz*sY,z1=bx*sY+bz*cY,y1=by*cX-z1*sX,z2=by*sX+z1*cX;
+        var pe=4.2/(4.2-z2);p._x=CX+x1*SC*pe;p._y=CY+y1*SC*pe;p._s=pe;p._z=z2;}
+      ctx.lineWidth=1;for(var l=0;l<links.length;l++){var A=links[l][0],B=links[l][1];var al=(0.05+0.09*((A._z+B._z)*0.5+1))*asm;if(al<=0.01)continue;ctx.strokeStyle='rgba(90,150,210,'+al.toFixed(3)+')';ctx.beginPath();ctx.moveTo(A._x,A._y);ctx.lineTo(B._x,B._y);ctx.stroke();}
+      var o=P.slice().sort(function(a,b){return a._z-b._z;});
+      for(var q=0;q<o.length;q++){var pt=o[q],dp=(pt._z+1.4)/2.6,al=(0.25+0.75*dp)*(0.35+0.65*asm),sz=pt.z2*pt._s*(0.7+0.5*dp);
+        ctx.fillStyle='rgba('+pt.r+','+pt.g+','+pt.b+','+(al*0.5).toFixed(3)+')';ctx.beginPath();ctx.arc(pt._x,pt._y,sz*2.1,0,6.283);ctx.fill();
+        ctx.fillStyle='rgba('+Math.min(255,pt.r+60)+','+Math.min(255,pt.g+60)+','+Math.min(255,pt.b+60)+','+al.toFixed(3)+')';ctx.beginPath();ctx.arc(pt._x,pt._y,Math.max(0.5,sz),0,6.283);ctx.fill();}
+      if(!reduce){
+        for(var si=0;si<sig.length;si++){var g0=sig[si];g0.t+=g0.v;if(g0.t>1){g0.t=0;g0.l=links[(Math.random()*links.length)|0];}if(!g0.l)continue;var A2=g0.l[0],B2=g0.l[1];glow(lerp(A2._x,B2._x,g0.t),lerp(A2._y,B2._y,g0.t),3*asm,'180,240,200');}
+        for(var ci=0;ci<csig.length;ci++){var c0=csig[ci];c0.t+=c0.v;if(c0.t>1)c0.t=0;var ix=c0.t*(cord.length-1),i0=Math.floor(ix),fr=ix-i0,pA=cord[i0],pB=cord[Math.min(cord.length-1,i0+1)];if(pA&&pB)glow(lerp(pA._x,pB._x,fr),lerp(pA._y,pB._y,fr),4.2*asm,'150,215,255');}
+      }
+      ctx.globalCompositeOperation='source-over';
+      if(!reduce)requestAnimationFrame(frame);
+    }
+    function onScroll(){computeProgress();overlay();}
+    window.addEventListener('scroll',onScroll,{passive:true});
+    window.addEventListener('resize',function(){measure();onScroll();},{passive:true});
+    computeProgress();overlay();
+    if(reduce){progress=0.6;overlay();frame(performance.now());}else requestAnimationFrame(frame);
+  })();
+  </script>
 </section>
 
 <!-- ======== STATS ======== -->
@@ -320,7 +408,7 @@
       <p class="section-subtitle" style="color:rgba(255,255,255,0.60);">La fiducia e la riconoscenza dei nostri pazienti sono la nostra migliore testimonianza</p>
     </div>
     <div class="testimonials-grid">
-            <div class="testimonial-card fade-in">
+      <div class="testimonial-card fade-in">
         <div class="quote-icon">"</div>
         <div class="stars">★★★★★</div>
         <p class="testimonial-text">La sicurezza, la competenza e il calore umano del dottor Parbonetti e della sua équipe mi hanno spinta ad affidarmi alle loro cure. Sottoposta a un complesso intervento di circa dieci ore, oggi sono qui: mi hanno salvato la vita.</p>
