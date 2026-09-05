@@ -244,7 +244,7 @@
           <div class="contact-info-icon blue">✉️</div>
           <div>
             <strong>Email</strong>
-            <span><a href="mailto:parbonetti.giovanni@gmail.com">parbonetti.giovanni@gmail.com</a></span>
+            <span><a href="mailto:parbonetti.giovanni@gmail.com" style="color:var(--blue); font-weight:600;">parbonetti.giovanni@gmail.com</a></span>
           </div>
         </div>
 
@@ -351,16 +351,46 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     msg.innerHTML = '⚠️ Per procedere è necessario accettare la Privacy Policy.';
     return;
   }
-  // Simulazione invio – integrare con Formspree, EmailJS o backend
+  // Invio reale tramite FormSubmit: la richiesta viene inoltrata all'email del titolare.
+  // NB: al PRIMO invio FormSubmit manda una email di conferma all'indirizzo del dottore:
+  // va cliccato il link una sola volta per attivare la ricezione dei messaggi.
+  var form = this;
+  var btn = form.querySelector('.form-submit');
+  if (btn) { btn.disabled = true; btn.style.opacity = '0.6'; }
   msg.style.display = 'block';
-  msg.style.background = '#f0fdf4';
-  msg.style.color = '#16a34a';
-  msg.style.border = '1px solid #bbf7d0';
-  msg.innerHTML = '✅ Richiesta inviata con successo! Sarai ricontattato entro 48 ore lavorative.';
-  this.reset();
-  /* Per attivare l'invio reale, usare Formspree:
-     <form action="https://formspree.io/f/YOUR_ID" method="POST">
-     oppure integrare EmailJS o un backend PHP/Node.js */
+  msg.style.background = '#eff6ff';
+  msg.style.color = '#2E6DB4';
+  msg.style.border = '1px solid #bfdbfe';
+  msg.innerHTML = '⏳ Invio in corso...';
+  fetch('https://formsubmit.co/ajax/parbonetti.giovanni@gmail.com', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({
+      Nome: form.nome.value,
+      Cognome: form.cognome.value,
+      Email: form.email.value,
+      Telefono: form.telefono.value,
+      Messaggio: form.motivo.value,
+      _subject: 'Nuova richiesta di visita dal sito parbonettigiovanni.com',
+      _template: 'table',
+      _captcha: 'false'
+    })
+  })
+  .then(function (r) { return r.json(); })
+  .then(function () {
+    msg.style.background = '#f0fdf4';
+    msg.style.color = '#16a34a';
+    msg.style.border = '1px solid #bbf7d0';
+    msg.innerHTML = '✅ Richiesta inviata con successo! Sarai ricontattato entro 48 ore lavorative.';
+    form.reset();
+  })
+  .catch(function () {
+    msg.style.background = '#fef2f2';
+    msg.style.color = '#dc2626';
+    msg.style.border = '1px solid #fecaca';
+    msg.innerHTML = '⚠️ Invio non riuscito. Riprova o scrivici a parbonetti.giovanni@gmail.com';
+  })
+  .finally(function () { if (btn) { btn.disabled = false; btn.style.opacity = '1'; } });
 });
 </script>
 <script src="animations.js?v=2"></script>
