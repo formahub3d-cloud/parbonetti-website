@@ -154,7 +154,7 @@
     </div>
   </div>
   <style>
-    .neuro-scene{position:relative;height:280vh;background:#07142b;}
+    .neuro-scene{position:relative;height:200vh;background:#07142b;}
     .neuro-sticky{position:sticky;top:0;height:100vh;overflow:hidden;}
     #neuroCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
     .neuro-vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 60% at 50% 42%,transparent 42%,rgba(4,11,26,.6) 100%);}
@@ -167,7 +167,7 @@
     .neuro-stat{opacity:0;transform:translateY(20px);}
     .neuro-stat b{font-family:'Montserrat',sans-serif;font-weight:800;font-size:clamp(1.7rem,3vw,2.4rem);background:linear-gradient(90deg,var(--blue),var(--green));-webkit-background-clip:text;background-clip:text;color:transparent;display:block;}
     .neuro-stat span{font-size:.8rem;color:rgba(255,255,255,.55);letter-spacing:.5px;}
-    @media (max-width:640px){.neuro-scene{height:220vh;}.neuro-overlay{justify-content:flex-end;padding:0 7vw 14vh;}.neuro-stats{gap:22px;}}
+    @media (max-width:640px){.neuro-scene{height:170vh;}.neuro-overlay{justify-content:flex-end;padding:0 7vw 14vh;}.neuro-stats{gap:22px;}}
   </style>
   <script>
   (function(){
@@ -175,9 +175,13 @@
     var cv=document.getElementById('neuroCanvas'); if(!cv) return;
     var ctx=cv.getContext('2d'), scene=document.getElementById('neuroScene');
     var DPR=Math.min(window.devicePixelRatio||1,2), W=0,H=0,CX=0,CY=0,SC=1;
+    /* Misura il canvas. Ridimensiona SOLO se le dimensioni sono cambiate:
+       assegnare cv.width cancella il disegno, quindi non va fatto a ogni frame. */
     function measure(){var r=cv.getBoundingClientRect();W=r.width;H=r.height;if(W<2||H<2)return false;
-      cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0);
-      CX=W*0.5;CY=H*0.4;SC=Math.min(W,H)*0.2;return true;}
+      var nw=Math.round(W*DPR),nh=Math.round(H*DPR);
+      if(cv.width!==nw||cv.height!==nh){cv.width=nw;cv.height=nh;}
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+      CX=W*0.5;CY=H*0.42;SC=Math.min(W,H)*0.22;return true;}
     function rnd(a,b){return a+Math.random()*(b-a);}
     var P=[];
     function hemi(sign,n,col){for(var i=0;i<n;i++){var u=Math.random(),v=Math.random();
@@ -215,33 +219,35 @@
     function glow(x,y,r,c){var g=ctx.createRadialGradient(x,y,0,x,y,r*3.5);g.addColorStop(0,'rgba('+c+',.9)');g.addColorStop(.4,'rgba('+c+',.4)');g.addColorStop(1,'rgba('+c+',0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r*3.5,0,6.283);ctx.fill();}
     var t0=performance.now();
     function frame(now){
-      if(!measure()){if(!reduce)requestAnimationFrame(frame);return;}
+      /* Se il canvas non ha ancora dimensioni valide riprova al frame dopo,
+         anche con "riduci animazioni": altrimenti resterebbe vuoto per sempre. */
+      if(!measure()){requestAnimationFrame(frame);return;}
       var tm=(now-t0)/1000;
-      var asm=reduce?1:easeOut(clamp01(progress/0.5));
-      var rY=reduce?0.5:((progress-0.5)*1.7+tm*0.11), rX=-0.17+Math.sin(tm*0.25)*0.05;
+      /* Il cervello e' SEMPRE formato e visibile: lo scroll aggiunge solo rotazione. */
+      var rY=reduce?0.5:(progress*1.5+tm*0.16), rX=-0.17+Math.sin(tm*0.25)*0.05;
       var cY=Math.cos(rY),sY=Math.sin(rY),cX=Math.cos(rX),sX=Math.sin(rX);
       ctx.clearRect(0,0,W,H);
       var bg=ctx.createRadialGradient(CX,CY,0,CX,CY,Math.max(W,H)*0.6);bg.addColorStop(0,'rgba(20,48,92,.35)');bg.addColorStop(1,'rgba(7,20,43,0)');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
       ctx.globalCompositeOperation='lighter';
       for(var i=0;i<P.length;i++){var p=P[i];
-        var bx=lerp(p.sx,p.bx,asm),by=lerp(p.sy,p.by,asm),bz=lerp(p.sz,p.bz,asm);
+        var bx=p.bx,by=p.by,bz=p.bz;
         var x1=bx*cY-bz*sY,z1=bx*sY+bz*cY,y1=by*cX-z1*sX,z2=by*sX+z1*cX;
         var pe=4.2/(4.2-z2);p._x=CX+x1*SC*pe;p._y=CY+y1*SC*pe;p._s=pe;p._z=z2;}
-      ctx.lineWidth=1;for(var l=0;l<links.length;l++){var A=links[l][0],B=links[l][1];var al=(0.05+0.09*((A._z+B._z)*0.5+1))*asm;if(al<=0.01)continue;ctx.strokeStyle='rgba(90,150,210,'+al.toFixed(3)+')';ctx.beginPath();ctx.moveTo(A._x,A._y);ctx.lineTo(B._x,B._y);ctx.stroke();}
+      ctx.lineWidth=1;for(var l=0;l<links.length;l++){var A=links[l][0],B=links[l][1];var al=0.06+0.10*((A._z+B._z)*0.5+1);ctx.strokeStyle='rgba(90,150,210,'+al.toFixed(3)+')';ctx.beginPath();ctx.moveTo(A._x,A._y);ctx.lineTo(B._x,B._y);ctx.stroke();}
       var o=P.slice().sort(function(a,b){return a._z-b._z;});
-      for(var q=0;q<o.length;q++){var pt=o[q],dp=(pt._z+1.4)/2.6,al=(0.25+0.75*dp)*(0.35+0.65*asm),sz=pt.z2*pt._s*(0.7+0.5*dp);
+      for(var q=0;q<o.length;q++){var pt=o[q],dp=(pt._z+1.4)/2.6,al=0.30+0.70*dp,sz=pt.z2*pt._s*(0.7+0.5*dp);
         ctx.fillStyle='rgba('+pt.r+','+pt.g+','+pt.b+','+(al*0.5).toFixed(3)+')';ctx.beginPath();ctx.arc(pt._x,pt._y,sz*2.1,0,6.283);ctx.fill();
         ctx.fillStyle='rgba('+Math.min(255,pt.r+60)+','+Math.min(255,pt.g+60)+','+Math.min(255,pt.b+60)+','+al.toFixed(3)+')';ctx.beginPath();ctx.arc(pt._x,pt._y,Math.max(0.5,sz),0,6.283);ctx.fill();}
       if(!reduce){
-        for(var si=0;si<sig.length;si++){var g0=sig[si];g0.t+=g0.v;if(g0.t>1){g0.t=0;g0.l=links[(Math.random()*links.length)|0];}if(!g0.l)continue;var A2=g0.l[0],B2=g0.l[1];glow(lerp(A2._x,B2._x,g0.t),lerp(A2._y,B2._y,g0.t),3*asm,'180,240,200');}
-        for(var ci=0;ci<csig.length;ci++){var c0=csig[ci];c0.t+=c0.v;if(c0.t>1)c0.t=0;var ix=c0.t*(cord.length-1),i0=Math.floor(ix),fr=ix-i0,pA=cord[i0],pB=cord[Math.min(cord.length-1,i0+1)];if(pA&&pB)glow(lerp(pA._x,pB._x,fr),lerp(pA._y,pB._y,fr),4.2*asm,'150,215,255');}
+        for(var si=0;si<sig.length;si++){var g0=sig[si];g0.t+=g0.v;if(g0.t>1){g0.t=0;g0.l=links[(Math.random()*links.length)|0];}if(!g0.l)continue;var A2=g0.l[0],B2=g0.l[1];glow(lerp(A2._x,B2._x,g0.t),lerp(A2._y,B2._y,g0.t),3,'180,240,200');}
+        for(var ci=0;ci<csig.length;ci++){var c0=csig[ci];c0.t+=c0.v;if(c0.t>1)c0.t=0;var ix=c0.t*(cord.length-1),i0=Math.floor(ix),fr=ix-i0,pA=cord[i0],pB=cord[Math.min(cord.length-1,i0+1)];if(pA&&pB)glow(lerp(pA._x,pB._x,fr),lerp(pA._y,pB._y,fr),4.2,'150,215,255');}
       }
       ctx.globalCompositeOperation='source-over';
       if(!reduce)requestAnimationFrame(frame);
     }
     function onScroll(){computeProgress();overlay();}
     window.addEventListener('scroll',onScroll,{passive:true});
-    window.addEventListener('resize',function(){measure();onScroll();},{passive:true});
+    window.addEventListener('resize',function(){measure();onScroll();if(reduce)frame(performance.now());},{passive:true});
     computeProgress();overlay();
     if(reduce){progress=0.6;overlay();frame(performance.now());}else requestAnimationFrame(frame);
   })();
