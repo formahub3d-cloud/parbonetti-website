@@ -341,6 +341,53 @@
     var cord=P.filter(function(p){return p.cord;}).sort(function(a,b){return a.by-b.by;});
     var sig=[];for(var s=0;s<10;s++)sig.push({l:links[(Math.random()*links.length)|0],t:Math.random(),v:rnd(0.006,0.015)});
     var csig=[];for(var c=0;c<4;c++)csig.push({t:Math.random(),v:rnd(0.002,0.004)});
+
+    /* ---------- LE DUE MANI, RICAVATE DAL LOGO VERO --------------------
+       Le mani non sono disegnate a mano: si carica il file del logo in una
+       piccola canvas di servizio e si tengono SOLO i pixel grigi (il cervello
+       nel logo e' blu/verde, lo sfondo e' bianco). Da quei pixel si estrae una
+       nuvola di punti, quindi la sagoma coincide esattamente con il marchio
+       del Dottore. Se un domani il logo cambia, cambiano anche le mani.       */
+    var MANI=[];
+    (function caricaMani(){
+      var img=new Image();
+      img.onload=function(){
+        var cw=340, ch=Math.round(cw*img.naturalHeight/img.naturalWidth);
+        var oc=document.createElement('canvas');oc.width=cw;oc.height=ch;
+        var o=oc.getContext('2d');o.drawImage(img,0,0,cw,ch);
+        var dat;try{dat=o.getImageData(0,0,cw,ch).data;}catch(e){return;}
+        var pts=[],x,y,ii,r,g,b,mx,mn;
+        for(y=0;y<ch;y++)for(x=0;x<cw;x++){
+          ii=(y*cw+x)*4;r=dat[ii];g=dat[ii+1];b=dat[ii+2];
+          mx=r>g?(r>b?r:b):(g>b?g:b); mn=r<g?(r<b?r:b):(g<b?g:b);
+          /* grigio = i tre canali quasi uguali e luminosita' media */
+          if(mx-mn<18&&mn>105&&mx<185)pts.push(x,y);
+        }
+        if(pts.length<800)return;
+        var X0=1e9,X1=-1e9,Y0=1e9;
+        for(ii=0;ii<pts.length;ii+=2){
+          if(pts[ii]<X0)X0=pts[ii];if(pts[ii]>X1)X1=pts[ii];
+          if(pts[ii+1]<Y0)Y0=pts[ii+1];}
+        var stretto=window.innerWidth<760;
+        var LARG=stretto?3.5:4.15;                  /* larghezza in unita' scena */
+        var k=LARG/(X1-X0), cxL=(X0+X1)/2, N=stretto?520:1250;
+        for(var n=0;n<N;n++){
+          var j=((Math.random()*(pts.length>>1))|0)*2;
+          var bx=(pts[j]-cxL)*k;
+          var by=(pts[j+1]-Y0)*k+0.42;              /* partono sotto al cervello */
+          /* le mani si incurvano verso chi guarda, come palme aperte */
+          var u=Math.min(1,Math.abs(bx)/(LARG*0.5));
+          var bz=0.55*Math.sin(Math.PI*u)+(Math.random()-.5)*0.12;
+          var sh=0.72+0.28*Math.random();           /* variazione di grigio */
+          MANI.push({bx:bx,by:by,bz:bz,r:0.75+Math.random()*1.05,
+            a:0.26+Math.random()*0.30,
+            c:Math.round(180*sh+42)+','+Math.round(188*sh+42)+','+Math.round(198*sh+42)});
+        }
+        if(reduce)frame(performance.now());
+      };
+      img.src='PHOTO-2025-06-05-13-00-34.jpg';
+    })();
+
     function lerp(a,b,t){return a+(b-a)*t;}
     function clamp01(v){return Math.max(0,Math.min(1,v));}
     function easeOut(t){return 1-Math.pow(1-t,3);}
@@ -362,6 +409,21 @@
       ctx.clearRect(0,0,W,H);
       var bg=ctx.createRadialGradient(CX,CY,0,CX,CY,Math.max(W,H)*0.6);bg.addColorStop(0,'rgba(20,48,92,.35)');bg.addColorStop(1,'rgba(7,20,43,0)');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
       ctx.globalCompositeOperation='lighter';
+      /* Le mani ruotano MOLTO meno del cervello: oscillano appena, cosi'
+         restano sempre aperte verso chi guarda mentre il cervello gira. */
+      if(MANI.length){
+        var rYm=Math.sin(tm*0.22)*0.15, rXm=-0.06;
+        var cYm=Math.cos(rYm),sYm=Math.sin(rYm),cXm=Math.cos(rXm),sXm=Math.sin(rXm);
+        for(var mi=0;mi<MANI.length;mi++){var mq=MANI[mi];
+          var hx=mq.bx*cYm-mq.bz*sYm, hz=mq.bx*sYm+mq.bz*cYm;
+          var hy=mq.by*cXm-hz*sXm, hz2=mq.by*sXm+hz*cXm;
+          var hpe=4.2/(4.2-hz2), hsx=CX+hx*SC*hpe, hsy=CY+hy*SC*hpe;
+          var hal=mq.a*(0.55+0.45*((hz2+1.4)/2.6));
+          ctx.fillStyle='rgba('+mq.c+','+(hal*0.4).toFixed(3)+')';
+          ctx.beginPath();ctx.arc(hsx,hsy,mq.r*hpe*2,0,6.283);ctx.fill();
+          ctx.fillStyle='rgba('+mq.c+','+hal.toFixed(3)+')';
+          ctx.beginPath();ctx.arc(hsx,hsy,Math.max(0.5,mq.r*hpe),0,6.283);ctx.fill();}
+      }
       for(var i=0;i<P.length;i++){var p=P[i];
         var bx=p.bx,by=p.by,bz=p.bz;
         var x1=bx*cY-bz*sY,z1=bx*sY+bz*cY,y1=by*cX-z1*sX,z2=by*sX+z1*cX;
