@@ -130,6 +130,11 @@
 
 <style>
   .nh{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;background:#081426;padding-top:72px;}
+  /* IMPORTANTE: dentro un contenitore flex il .container non si allarga da solo,
+     si restringe attorno al contenuto. Senza width:100% diventava largo 608px
+     (560 di testo + 48 di padding) e finiva CENTRATO nello schermo, cioe' sopra
+     la foto. Con width:100% torna largo 1160px e il testo resta a sinistra. */
+  .nh>.container{width:100%;}
   /* La foto occupa una fascia ampia a destra e resta ben leggibile */
   .nh-photo{position:absolute;top:0;right:0;width:58%;height:100%;}
   .nh-photo img{width:100%;height:100%;object-fit:cover;object-position:center 16%;}
@@ -144,7 +149,10 @@
   .nh-in{position:relative;max-width:560px;padding:80px 0;text-shadow:0 2px 20px rgba(8,20,38,.8);}
   .nh-kicker{font-family:'Montserrat',sans-serif;font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--green);animation:nhUp .7s ease both;}
   .nh-title{font-family:'Montserrat',sans-serif;font-weight:800;font-size:clamp(2.5rem,5.6vw,4.3rem);line-height:1;letter-spacing:-2px;color:#fff;margin:22px 0 0;animation:nhUp .85s ease .12s both;}
-  .nh-title i{font-style:normal;font-weight:400;display:block;font-size:.44em;letter-spacing:1px;color:rgba(255,255,255,.8);margin-top:16px;}
+  /* Sottotitolo: leggermente piu' piccolo, con interlinea propria (l'h1 ha
+     line-height:1) e text-wrap:balance, cosi' su due righe non resta la parola
+     "Neurochirurgia" orfana da sola in fondo. */
+  .nh-title i{font-style:normal;font-weight:400;display:block;font-size:.40em;line-height:1.25;text-wrap:balance;letter-spacing:1px;color:rgba(255,255,255,.8);margin-top:16px;}
   .nh-quote{border-left:3px solid var(--green);padding-left:20px;margin-top:32px;font-size:1.02rem;line-height:1.75;color:rgba(255,255,255,.9);max-width:430px;animation:nhUp .85s ease .3s both;}
   .nh-nums{display:flex;gap:44px;margin-top:44px;flex-wrap:wrap;animation:nhUp .85s ease .45s both;}
   .nh-nums b{display:block;font-family:'Montserrat',sans-serif;font-size:2.3rem;font-weight:800;line-height:1;
