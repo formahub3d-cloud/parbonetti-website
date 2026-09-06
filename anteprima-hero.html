@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Proposte hero – Dott. Giovanni Parbonetti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" />
+<style>
+  :root{
+    --blue:#2E6DB4; --green:#5BA85A; --dark:#0A1F3C;
+    --white:#fff; --gray:#6B7280; --light:#F4F6F9;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Open Sans',sans-serif;background:#0b1526;color:#fff;}
+  img{display:block;max-width:100%;}
+
+  /* Etichetta della proposta */
+  .tag{
+    position:sticky;top:0;z-index:50;
+    background:#0b1526;border-bottom:1px solid rgba(255,255,255,.1);
+    padding:14px 28px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+  }
+  .tag b{font-family:'Montserrat',sans-serif;font-size:.95rem;font-weight:700;letter-spacing:.5px;}
+  .tag span{font-size:.82rem;color:rgba(255,255,255,.55);}
+  .tag em{font-style:normal;color:var(--green);font-weight:600;font-size:.82rem;}
+
+  .hero{position:relative;min-height:88vh;overflow:hidden;display:flex;align-items:center;}
+  .wrap{width:100%;max-width:1180px;margin:0 auto;padding:0 32px;}
+
+  @keyframes up{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes fade{from{opacity:0;}to{opacity:1;}}
+  @keyframes inRight{from{opacity:0;transform:translateX(46px);}to{opacity:1;transform:translateX(0);}}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+  @keyframes drawline{from{transform:scaleX(0);}to{transform:scaleX(1);}}
+  @keyframes drift{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(40px,-30px) scale(1.12);}66%{transform:translate(-30px,25px) scale(.94);}}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(9px);}}
+  @keyframes ring{0%{transform:scale(.85);opacity:.55;}100%{transform:scale(1.35);opacity:0;}}
+
+  /* ============ 1. AURORA ============ */
+  .a{background:var(--dark);}
+  .a-blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;pointer-events:none;}
+  .a-b1{width:520px;height:520px;background:#2E6DB4;top:-140px;left:-120px;animation:drift 18s ease-in-out infinite;}
+  .a-b2{width:440px;height:440px;background:#5BA85A;bottom:-160px;left:26%;animation:drift 23s ease-in-out infinite reverse;}
+  .a-b3{width:380px;height:380px;background:#1b4f8f;top:18%;right:-90px;animation:drift 20s ease-in-out infinite;}
+  .a-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.09) 1px,transparent 1px);background-size:34px 34px;mask-image:radial-gradient(ellipse 75% 65% at 40% 45%,#000 30%,transparent 78%);}
+  .a-in{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center;padding:70px 0;}
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#8fd08e;animation:up .7s ease both;}
+  .eyebrow::before{content:'';width:26px;height:1px;background:#8fd08e;}
+  .a h1{font-family:'Montserrat',sans-serif;font-weight:800;font-size:clamp(2.4rem,5.2vw,4rem);line-height:1.04;letter-spacing:-1.5px;margin:20px 0 0;animation:up .8s ease .1s both;}
+  .a h1 span{display:block;color:var(--green);}
+  .a-line{height:3px;width:120px;background:linear-gradient(90deg,var(--blue),var(--green));margin:26px 0;transform-origin:left;animation:drawline .9s cubic-bezier(.2,.8,.3,1) .5s both;}
+  .a-role{font-size:1.12rem;color:rgba(255,255,255,.82);font-weight:500;animation:up .8s ease .25s both;}
+  .a-hosp{font-size:.92rem;color:rgba(255,255,255,.5);margin-top:8px;animation:up .8s ease .33s both;}
+  .a-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px;animation:up .8s ease .42s both;}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 30px;border-radius:50px;font-family:'Montserrat',sans-serif;font-weight:600;font-size:.93rem;text-decoration:none;transition:transform .25s,box-shadow .25s;}
+  .btn-g{background:var(--green);color:#fff;box-shadow:0 6px 22px rgba(91,168,90,.4);}
+  .btn-o{border:2px solid rgba(255,255,255,.45);color:#fff;}
+  .btn:hover{transform:translateY(-3px);}
+  .a-chips{display:flex;gap:12px;flex-wrap:wrap;margin-top:38px;}
+  .chip{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:50px;padding:8px 18px;font-size:.82rem;color:rgba(255,255,255,.8);animation:up .7s ease both;}
+  .chip b{color:var(--green);font-weight:700;}
+  .a-photo{position:relative;justify-self:center;animation:inRight 1s cubic-bezier(.2,.8,.3,1) .3s both;}
+  .a-photo>img{width:100%;max-width:390px;height:490px;object-fit:cover;object-position:center top;border-radius:24px;border:3px solid rgba(255,255,255,.16);box-shadow:0 30px 70px rgba(0,0,0,.5);animation:float 6s ease-in-out 1.2s infinite;}
+  .a-halo{position:absolute;inset:-26px;border-radius:34px;border:1px solid rgba(91,168,90,.4);animation:ring 3.4s ease-out infinite;}
+  .scroll{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);font-size:.72rem;letter-spacing:2px;color:rgba(255,255,255,.4);text-transform:uppercase;animation:bob 2s ease-in-out infinite;}
+
+  /* ============ 2. SPLIT EDITORIALE ============ */
+  .b{background:#081426;}
+  .b-photo{position:absolute;top:0;right:0;width:52%;height:100%;}
+  .b-photo img{width:100%;height:100%;object-fit:cover;object-position:center 18%;}
+  .b-mask{position:absolute;inset:0;background:linear-gradient(90deg,#081426 4%,rgba(8,20,38,.75) 34%,rgba(8,20,38,.12) 72%),linear-gradient(0deg,rgba(8,20,38,.9),transparent 55%);}
+  .b-net{position:absolute;inset:0;opacity:.5;}
+  .b-in{position:relative;max-width:640px;padding:80px 0;}
+  .b-kicker{font-family:'Montserrat',sans-serif;font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--green);animation:up .7s ease both;}
+  .b h1{font-family:'Montserrat',sans-serif;font-weight:800;font-size:clamp(2.5rem,5.6vw,4.3rem);line-height:1;letter-spacing:-2px;margin:22px 0 0;animation:up .85s ease .12s both;}
+  .b h1 i{font-style:normal;font-weight:400;display:block;font-size:.44em;letter-spacing:1px;color:rgba(255,255,255,.62);margin-top:16px;}
+  .b-quote{border-left:3px solid var(--green);padding-left:20px;margin:32px 0 0;font-size:1.02rem;line-height:1.75;color:rgba(255,255,255,.78);max-width:440px;animation:up .85s ease .3s both;}
+  .b-nums{display:flex;gap:44px;margin-top:44px;flex-wrap:wrap;animation:up .85s ease .45s both;}
+  .b-nums div b{display:block;font-family:'Montserrat',sans-serif;font-size:2.3rem;font-weight:800;background:linear-gradient(90deg,var(--blue),var(--green));-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;}
+  .b-nums div span{font-size:.76rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:1.2px;}
+  .b-cta{margin-top:42px;animation:up .85s ease .58s both;}
+
+  /* ============ 3. CHIARO CLINICO ============ */
+  .c{background:#F6F8FB;color:var(--dark);}
+  .c-shape{position:absolute;border-radius:50%;pointer-events:none;}
+  .c-s1{width:620px;height:620px;background:#E4EEF9;top:-180px;right:-120px;animation:drift 24s ease-in-out infinite;}
+  .c-s2{width:300px;height:300px;background:#E6F3E5;bottom:-90px;left:-70px;animation:drift 19s ease-in-out infinite reverse;}
+  .c-dots{position:absolute;inset:0;background-image:radial-gradient(rgba(10,31,60,.10) 1px,transparent 1px);background-size:28px 28px;mask-image:radial-gradient(ellipse 60% 60% at 70% 50%,#000 20%,transparent 75%);}
+  .c-in{position:relative;display:grid;grid-template-columns:1fr .85fr;gap:56px;align-items:center;padding:70px 0;}
+  .c-badge{display:inline-flex;align-items:center;gap:9px;background:#fff;border:1px solid #DDE3ED;border-radius:50px;padding:8px 18px;font-size:.78rem;font-weight:600;color:var(--blue);animation:up .7s ease both;}
+  .c-dot{width:7px;height:7px;border-radius:50%;background:var(--green);}
+  .c h1{font-family:'Montserrat',sans-serif;font-weight:800;font-size:clamp(2.3rem,5vw,3.7rem);line-height:1.06;letter-spacing:-1.6px;margin:22px 0 0;color:var(--dark);animation:up .8s ease .1s both;}
+  .c h1 span{color:var(--blue);}
+  .c-sub{font-size:1.06rem;color:var(--gray);line-height:1.75;margin-top:20px;max-width:430px;animation:up .8s ease .24s both;}
+  .c-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px;animation:up .8s ease .36s both;}
+  .btn-b{background:var(--blue);color:#fff;box-shadow:0 6px 22px rgba(46,109,180,.32);}
+  .btn-w{background:#fff;color:var(--dark);border:1px solid #DDE3ED;}
+  .c-trust{display:flex;gap:28px;margin-top:44px;flex-wrap:wrap;animation:up .8s ease .48s both;}
+  .c-trust div b{display:block;font-family:'Montserrat',sans-serif;font-size:1.75rem;font-weight:800;color:var(--dark);line-height:1;}
+  .c-trust div span{font-size:.76rem;color:var(--gray);}
+  .c-photo{position:relative;justify-self:center;animation:inRight 1s cubic-bezier(.2,.8,.3,1) .28s both;}
+  .c-photo>img{width:100%;max-width:370px;height:470px;object-fit:cover;object-position:center top;border-radius:200px 200px 26px 26px;box-shadow:0 26px 60px rgba(10,31,60,.18);animation:float 7s ease-in-out 1.2s infinite;}
+  .c-pill{position:absolute;background:#fff;border-radius:14px;box-shadow:0 10px 30px rgba(10,31,60,.13);padding:12px 16px;font-size:.8rem;font-weight:600;color:var(--dark);animation:up .8s ease both;}
+  .c-p1{bottom:56px;left:-42px;animation-delay:.9s;}
+  .c-p2{top:64px;right:-34px;animation-delay:1.1s;}
+  .c-pill small{display:block;font-weight:400;color:var(--gray);font-size:.72rem;}
+
+  @media(max-width:900px){
+    .a-in,.c-in{grid-template-columns:1fr;gap:40px;}
+    .a-photo,.c-photo{order:-1;}
+    .a-photo>img,.c-photo>img{max-width:270px;height:330px;margin:0 auto;}
+    .b-photo{width:100%;opacity:.32;}
+    .b-mask{background:linear-gradient(0deg,#081426 22%,rgba(8,20,38,.86) 60%,rgba(8,20,38,.6));}
+    .c-p1,.c-p2{display:none;}
+    .wrap{padding:0 22px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="tag"><b>PROPOSTA 1 — Aurora</b> <em>evoluzione dell'attuale</em> <span>Sfondo blu notte con aurore in movimento, foto incorniciata che fluttua, alone verde pulsante.</span></div>
+<section class="hero a">
+  <div class="a-blob a-b1"></div><div class="a-blob a-b2"></div><div class="a-blob a-b3"></div>
+  <div class="a-grid"></div>
+  <div class="wrap a-in">
+    <div>
+      <p class="eyebrow">Neurochirurgia · Benevento</p>
+      <h1>Dott. Giovanni<span>Parbonetti</span></h1>
+      <div class="a-line"></div>
+      <p class="a-role">Neurochirurgo — Medico Chirurgo</p>
+      <p class="a-hosp">Direttore UOC Neurochirurgia · AORN San Pio, Presidio Rummo</p>
+      <div class="a-cta">
+        <a href="#" class="btn btn-g">Prenota una visita</a>
+        <a href="#" class="btn btn-o">Le aree di competenza</a>
+      </div>
+      <div class="a-chips">
+        <span class="chip" style="animation-delay:.7s"><b>800+</b> interventi ogni anno</span>
+        <span class="chip" style="animation-delay:.82s"><b>20+</b> anni di esperienza</span>
+        <span class="chip" style="animation-delay:.94s">Neurorianimazione dedicata</span>
+      </div>
+    </div>
+    <div class="a-photo">
+      <div class="a-halo"></div>
+      <img src="PHOTO-2025-05-21-15-43-56.jpg" alt="Dott. Giovanni Parbonetti" />
+    </div>
+  </div>
+  <div class="scroll">scorri</div>
+</section>
+
+<div class="tag"><b>PROPOSTA 2 — Split editoriale</b> <em>la più d'impatto</em> <span>Foto a tutta altezza sfumata nel fondo, tipografia grande da rivista, numeri che si contano da soli.</span></div>
+<section class="hero b">
+  <div class="b-photo">
+    <img src="PHOTO-2025-05-21-15-43-56.jpg" alt="Dott. Giovanni Parbonetti" />
+  </div>
+  <canvas class="b-net" id="netCanvas"></canvas>
+  <div class="b-mask"></div>
+  <div class="wrap">
+    <div class="b-in">
+      <p class="b-kicker">AORN San Pio · Benevento</p>
+      <h1>Parbonetti<i>Neurochirurgo · Direttore UOC Neurochirurgia</i></h1>
+      <p class="b-quote">Un riferimento per la chirurgia del cervello e della colonna vertebrale, con tecniche mini-invasive e monitoraggio neurofisiologico.</p>
+      <div class="b-nums">
+        <div><b data-n="800">0</b><span>Interventi / anno</span></div>
+        <div><b data-n="17">0</b><span>Patologie trattate</span></div>
+        <div><b data-n="20">0</b><span>Anni di esperienza</span></div>
+      </div>
+      <div class="b-cta">
+        <a href="#" class="btn btn-g">Prenota una visita</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="tag"><b>PROPOSTA 3 — Chiaro clinico</b> <em>la più distintiva</em> <span>Fondo chiaro invece del blu: pulito e rassicurante, si distingue da tutti i siti medici della zona.</span></div>
+<section class="hero c">
+  <div class="c-shape c-s1"></div><div class="c-shape c-s2"></div>
+  <div class="c-dots"></div>
+  <div class="wrap c-in">
+    <div>
+      <span class="c-badge"><span class="c-dot"></span> Riceve a Benevento</span>
+      <h1>Chirurgia del cervello e della <span>colonna vertebrale</span></h1>
+      <p class="c-sub">Dott. Giovanni Parbonetti, Direttore dell'Unità Operativa Complessa di Neurochirurgia dell'AORN San Pio.</p>
+      <div class="c-cta">
+        <a href="#" class="btn btn-b">Prenota una visita</a>
+        <a href="#" class="btn btn-w">Come funziona il percorso</a>
+      </div>
+      <div class="c-trust">
+        <div><b>800+</b><span>Interventi / anno</span></div>
+        <div><b>17+</b><span>Patologie trattate</span></div>
+        <div><b>20+</b><span>Anni di esperienza</span></div>
+      </div>
+    </div>
+    <div class="c-photo">
+      <img src="PHOTO-2025-05-21-15-43-56.jpg" alt="Dott. Giovanni Parbonetti" />
+      <div class="c-pill c-p1">Neurorianimazione<small>dedicata al reparto</small></div>
+      <div class="c-pill c-p2">Mini-invasiva<small>neuronavigazione</small></div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var cv=document.getElementById('netCanvas');
+  if(cv&&cv.getContext){
+    var ctx=cv.getContext('2d'),P=[],W=0,H=0;
+    function size(){var r=cv.getBoundingClientRect();W=r.width;H=r.height;if(W<2||H<2)return false;
+      var d=Math.min(window.devicePixelRatio||1,2);cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);return true;}
+    for(var i=0;i<58;i++)P.push({x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.00035,vy:(Math.random()-.5)*.00035});
+    function loop(){
+      if(!size()){requestAnimationFrame(loop);return;}
+      ctx.clearRect(0,0,W,H);
+      for(var i=0;i<P.length;i++){var p=P[i];p.x+=p.vx;p.y+=p.vy;
+        if(p.x<0||p.x>1)p.vx*=-1; if(p.y<0||p.y>1)p.vy*=-1;}
+      for(var i=0;i<P.length;i++){for(var j=i+1;j<P.length;j++){
+        var a=P[i],b=P[j],dx=(a.x-b.x)*W,dy=(a.y-b.y)*H,d2=dx*dx+dy*dy;
+        if(d2<20000){ctx.strokeStyle='rgba(91,168,90,'+(0.16*(1-d2/20000)).toFixed(3)+')';ctx.lineWidth=1;
+          ctx.beginPath();ctx.moveTo(a.x*W,a.y*H);ctx.lineTo(b.x*W,b.y*H);ctx.stroke();}}}
+      for(var i=0;i<P.length;i++){var p=P[i];ctx.fillStyle='rgba(140,200,255,.5)';
+        ctx.beginPath();ctx.arc(p.x*W,p.y*H,1.5,0,6.283);ctx.fill();}
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  }
+  var nums=document.querySelectorAll('.b-nums b[data-n]');
+  var seen=false;
+  function run(){
+    if(seen)return; seen=true;
+    nums.forEach(function(el){
+      var target=+el.getAttribute('data-n'),t0=performance.now();
+      function step(now){var k=Math.min((now-t0)/1500,1);
+        el.textContent=Math.round(target*(1-Math.pow(1-k,3)))+'+';
+        if(k<1)requestAnimationFrame(step);}
+      requestAnimationFrame(step);
+    });
+  }
+  if('IntersectionObserver' in window && nums.length){
+    var io=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)run();});},{threshold:.4});
+    io.observe(nums[0]);
+  } else { run(); }
+})();
+</script>
+</body>
+</html>
