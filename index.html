@@ -409,14 +409,12 @@
       ctx.clearRect(0,0,W,H);
       var bg=ctx.createRadialGradient(CX,CY,0,CX,CY,Math.max(W,H)*0.6);bg.addColorStop(0,'rgba(20,48,92,.35)');bg.addColorStop(1,'rgba(7,20,43,0)');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
       ctx.globalCompositeOperation='lighter';
-      /* Le mani ruotano MOLTO meno del cervello: oscillano appena, cosi'
-         restano sempre aperte verso chi guarda mentre il cervello gira. */
+      /* Le mani girano INSIEME al cervello: stessa rotazione rY/rX, quindi
+         orbitano attorno alla scena come un unico oggetto. */
       if(MANI.length){
-        var rYm=Math.sin(tm*0.22)*0.15, rXm=-0.06;
-        var cYm=Math.cos(rYm),sYm=Math.sin(rYm),cXm=Math.cos(rXm),sXm=Math.sin(rXm);
         for(var mi=0;mi<MANI.length;mi++){var mq=MANI[mi];
-          var hx=mq.bx*cYm-mq.bz*sYm, hz=mq.bx*sYm+mq.bz*cYm;
-          var hy=mq.by*cXm-hz*sXm, hz2=mq.by*sXm+hz*cXm;
+          var hx=mq.bx*cY-mq.bz*sY, hz=mq.bx*sY+mq.bz*cY;
+          var hy=mq.by*cX-hz*sX, hz2=mq.by*sX+hz*cX;
           var hpe=4.2/(4.2-hz2), hsx=CX+hx*SC*hpe, hsy=CY+hy*SC*hpe;
           var hal=mq.a*(0.55+0.45*((hz2+1.4)/2.6));
           ctx.fillStyle='rgba('+mq.c+','+(hal*0.4).toFixed(3)+')';
