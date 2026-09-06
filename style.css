@@ -724,7 +724,15 @@ ul { list-style: none; }
   border-bottom: 1px solid rgba(255,255,255,0.10);
 }
 .footer-brand { }
-.footer-brand img { height: 56px; margin-bottom: 16px; filter: brightness(0) invert(1); }
+/* Il logo è un JPG con sfondo bianco: il vecchio filtro brightness(0) invert(1)
+   lo rendeva un rettangolo tutto bianco. Lo mostriamo su una "targhetta" chiara. */
+.footer-brand img {
+  height: 56px; width: auto; display: block;
+  margin-bottom: 16px;
+  background: var(--white);
+  padding: 8px 12px;
+  border-radius: 10px;
+}
 .footer-brand p { font-size: 0.85rem; line-height: 1.8; max-width: 280px; }
 .footer-brand .disclaimer {
   font-size: 0.78rem;
