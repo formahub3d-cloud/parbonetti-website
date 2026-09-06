@@ -352,7 +352,9 @@
     (function caricaMani(){
       var img=new Image();
       img.onload=function(){
-        var cw=340, ch=Math.round(cw*img.naturalHeight/img.naturalWidth);
+        /* canvas di lettura piu' grande = la fessura fra pollice e dita del
+           marchio viene risolta bene e resta visibile anche fra le particelle */
+        var cw=460, ch=Math.round(cw*img.naturalHeight/img.naturalWidth);
         var oc=document.createElement('canvas');oc.width=cw;oc.height=ch;
         var o=oc.getContext('2d');o.drawImage(img,0,0,cw,ch);
         var dat;try{dat=o.getImageData(0,0,cw,ch).data;}catch(e){return;}
@@ -397,22 +399,26 @@
             var j=((Math.random()*(pool.length>>1))|0)*2;
             var u=(pool[j]-cxL)*k;                  /* posizione orizzontale */
             var by=(pool[j+1]-Y0)*k+0.42+(Math.random()-.5)*0.05;
-            var sh=(contorno?0.88:0.68)+0.26*Math.random();
+            var sh=(contorno?0.90:0.66)+0.24*Math.random();
             MANI.push({
               u:(u/(LARG*0.5))*TMAX,                /* angolo di base */
-              Ri:RAG+(Math.random()-.5)*(contorno?0.09:0.26),  /* spessore guscio */
+              /* guscio sottile sul contorno: se i punti del profilo sono
+                 sparpagliati in profondita' il bordo si sfoca e le dita spariscono */
+              Ri:RAG+(Math.random()-.5)*(contorno?0.05:0.22),
               by:by,
-              r:(contorno?0.8:0.6)+Math.random()*(contorno?0.8:1.0),
-              a:(contorno?0.36:0.20)+Math.random()*0.26,
-              alone:contorno||Math.random()<0.28,   /* l'alone costa: solo dove serve */
+              /* puntini piccoli: la forma la fa la densita', non la dimensione */
+              r:(contorno?0.55:0.45)+Math.random()*(contorno?0.5:0.6),
+              a:(contorno?0.44:0.20)+Math.random()*0.26,
+              alone:contorno||Math.random()<0.20,   /* l'alone costa: solo dove serve */
               c:Math.min(255,Math.round(180*sh+44))+','+
                 Math.min(255,Math.round(188*sh+44))+','+
                 Math.min(255,Math.round(198*sh+44))
             });
           }
         }
-        aggiungi(bordo,stretto?320:760,true);
-        aggiungi(pieno,stretto?360:860,false);
+        /* piu' peso al CONTORNO che al pieno: la mano si legge dal profilo */
+        aggiungi(bordo,stretto?460:1150,true);
+        aggiungi(pieno,stretto?300:700,false);
         if(reduce)frame(performance.now());
       };
       img.src='PHOTO-2025-06-05-13-00-34.jpg';
@@ -427,7 +433,7 @@
     function ov(id,v){var el=document.getElementById(id);if(el){el.style.opacity=v;el.style.transform='translateY('+((1-v)*22)+'px)';}}
     function overlay(){ov('nEyebrow',seg(progress,0.05,0.16));ov('nTitle',seg(progress,0.10,0.24));ov('nSub',seg(progress,0.18,0.34));}
     function glow(x,y,r,c){var g=ctx.createRadialGradient(x,y,0,x,y,r*3.5);g.addColorStop(0,'rgba('+c+',.9)');g.addColorStop(.4,'rgba('+c+',.4)');g.addColorStop(1,'rgba('+c+',0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r*3.5,0,6.283);ctx.fill();}
-    var t0=performance.now(), rYcur=null, rYvel=0;
+    var t0=performance.now(), rYcur=null, rYvel=0, progS=null;
     function frame(now){
       /* Se il canvas non ha ancora dimensioni valide riprova al frame dopo,
          anche con "riduci animazioni": altrimenti resterebbe vuoto per sempre. */
@@ -438,12 +444,19 @@
          lo insegue come una molla frenata (rYvel = velocita', 0.075 = forza della
          molla, 0.86 = attrito). Scorrendo veloce la scena "rincorre" e poi si
          assesta: il movimento non e' piu' a velocita' costante. */
-      var rYobb=progress*2.2+tm*0.10;
+      /* Tutti i movimenti sono volutamente LENTI: la scena non deve inseguire
+         lo scroll a scatti, deve scivolare. Molla morbida (0.030) e attrito
+         alto (0.90) = risposta lunga, di un paio di secondi. */
+      var rYobb=progress*0.90+tm*0.055;
       if(rYcur===null)rYcur=rYobb;
-      rYvel+=(rYobb-rYcur)*0.075; rYvel*=0.86; rYcur+=rYvel;
-      var rY=reduce?0.5:rYcur, rX=-0.17+Math.sin(tm*0.25)*0.05;
+      rYvel+=(rYobb-rYcur)*0.030; rYvel*=0.90; rYcur+=rYvel;
+      /* progresso "smorzato": serve alla chiusura delle mani, che deve essere
+         ancora piu' pigra dello scroll */
+      if(progS===null)progS=progress;
+      progS+=(progress-progS)*0.025;
+      var rY=reduce?0.5:rYcur, rX=-0.17+Math.sin(tm*0.16)*0.05;
       /* RESPIRO: l'insieme si dilata e si contrae appena, come qualcosa di vivo */
-      var SCr=SC*(reduce?1:(1+0.018*Math.sin(tm*0.55)));
+      var SCr=SC*(reduce?1:(1+0.018*Math.sin(tm*0.30)));
       var cY=Math.cos(rY),sY=Math.sin(rY),cX=Math.cos(rX),sX=Math.sin(rX);
       ctx.clearRect(0,0,W,H);
       var bg=ctx.createRadialGradient(CX,CY,0,CX,CY,Math.max(W,H)*0.6);bg.addColorStop(0,'rgba(20,48,92,.35)');bg.addColorStop(1,'rgba(7,20,43,0)');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
@@ -451,11 +464,12 @@
       /* Le mani girano INSIEME al cervello: stessa rotazione rY/rX, quindi
          orbitano attorno alla scena come un unico oggetto. */
       if(MANI.length){
-        /* scendendo, le mani si CHIUDONO un po' verso il cervello */
-        var chiu=1+progress*0.35;
+        /* scendendo, le mani si CHIUDONO appena verso il cervello: movimento
+           volutamente lentissimo, guidato dal progresso smorzato */
+        var chiu=1+progS*0.20;
         /* IMPULSO che risale dal polso ai polpastrelli: non e' una particella
            che si muove, e' una fascia luminosa che scorre lungo l'angolo. */
-        var onda=((tm*0.34)%1.7)-0.32;
+        var onda=((tm*0.17)%1.7)-0.32;
         for(var mi=0;mi<MANI.length;mi++){var mq=MANI[mi];
           var mth=mq.u*chiu;
           var mbx=mq.Ri*Math.sin(mth), mbz=MANI_ZC-mq.Ri*Math.cos(mth);
@@ -468,9 +482,11 @@
           var dOn=Math.abs(Math.abs(mq.u)-onda);
           if(dOn<0.13)hal+=(1-dOn/0.13)*0.55;
           if(hal>1)hal=1;
+          /* alone piccolo e discreto: se e' largo, la luce tracima nella
+             fessura fra pollice e dita e la mano diventa una macchia */
           if(mq.alone){
-            ctx.fillStyle='rgba('+mq.c+','+(hal*0.34).toFixed(3)+')';
-            ctx.beginPath();ctx.arc(hsx,hsy,mq.r*hpe*2.2,0,6.283);ctx.fill();
+            ctx.fillStyle='rgba('+mq.c+','+(hal*0.20).toFixed(3)+')';
+            ctx.beginPath();ctx.arc(hsx,hsy,mq.r*hpe*1.6,0,6.283);ctx.fill();
           }
           ctx.fillStyle='rgba('+mq.c+','+hal.toFixed(3)+')';
           ctx.beginPath();ctx.arc(hsx,hsy,Math.max(0.5,mq.r*hpe),0,6.283);ctx.fill();}
