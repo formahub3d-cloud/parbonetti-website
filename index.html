@@ -139,11 +139,13 @@
     background:
       linear-gradient(90deg,#081426 2%,rgba(8,20,38,.86) 24%,rgba(8,20,38,.42) 48%,rgba(8,20,38,0) 68%),
       linear-gradient(0deg,rgba(8,20,38,.72),transparent 42%);}
-  .nh-in{position:relative;max-width:640px;padding:80px 0;}
+  /* Colonna di testo tenuta nella zona scura, con ombra morbida:
+     così la foto resta luminosa ma il testo sopra il camice si legge bene. */
+  .nh-in{position:relative;max-width:560px;padding:80px 0;text-shadow:0 2px 20px rgba(8,20,38,.8);}
   .nh-kicker{font-family:'Montserrat',sans-serif;font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--green);animation:nhUp .7s ease both;}
   .nh-title{font-family:'Montserrat',sans-serif;font-weight:800;font-size:clamp(2.5rem,5.6vw,4.3rem);line-height:1;letter-spacing:-2px;color:#fff;margin:22px 0 0;animation:nhUp .85s ease .12s both;}
-  .nh-title i{font-style:normal;font-weight:400;display:block;font-size:.44em;letter-spacing:1px;color:rgba(255,255,255,.66);margin-top:16px;}
-  .nh-quote{border-left:3px solid var(--green);padding-left:20px;margin-top:32px;font-size:1.02rem;line-height:1.75;color:rgba(255,255,255,.8);max-width:450px;animation:nhUp .85s ease .3s both;}
+  .nh-title i{font-style:normal;font-weight:400;display:block;font-size:.44em;letter-spacing:1px;color:rgba(255,255,255,.8);margin-top:16px;}
+  .nh-quote{border-left:3px solid var(--green);padding-left:20px;margin-top:32px;font-size:1.02rem;line-height:1.75;color:rgba(255,255,255,.9);max-width:430px;animation:nhUp .85s ease .3s both;}
   .nh-nums{display:flex;gap:44px;margin-top:44px;flex-wrap:wrap;animation:nhUp .85s ease .45s both;}
   .nh-nums b{display:block;font-family:'Montserrat',sans-serif;font-size:2.3rem;font-weight:800;line-height:1;
     background:linear-gradient(90deg,var(--blue),var(--green));-webkit-background-clip:text;background-clip:text;color:transparent;}
