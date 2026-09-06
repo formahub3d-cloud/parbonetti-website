@@ -104,8 +104,10 @@
   <div class="nh-photo">
     <img src="PHOTO-2025-05-21-15-43-56.jpg" alt="Dott. Giovanni Parbonetti, Neurochirurgo" width="760" height="1013" fetchpriority="high" decoding="async" />
   </div>
-  <canvas class="nh-net" id="nhNet" aria-hidden="true"></canvas>
+  <!-- Ordine: prima la velatura scura, POI le particelle: cosi' i puntini
+       luminosi galleggiano sopra tutto, anche sopra la foto. -->
   <div class="nh-mask" aria-hidden="true"></div>
+  <canvas class="nh-net" id="nhNet" aria-hidden="true"></canvas>
 
   <div class="container">
     <div class="nh-in">
@@ -135,10 +137,16 @@
      (560 di testo + 48 di padding) e finiva CENTRATO nello schermo, cioe' sopra
      la foto. Con width:100% torna largo 1160px e il testo resta a sinistra. */
   .nh>.container{width:100%;}
-  /* La foto occupa una fascia ampia a destra e resta ben leggibile */
-  .nh-photo{position:absolute;top:0;right:0;width:58%;height:100%;}
+  /* La foto occupa una fascia ampia a destra e resta ben leggibile.
+     mask-image sfuma i BORDI LATERALI della foto stessa: a sinistra sparisce
+     dentro il fondo scuro (niente piu' stacco netto verticale), a destra si
+     ammorbidisce verso il bordo della finestra. E' una maschera di trasparenza,
+     non un velo scuro: la foto resta luminosa dove conta, al centro. */
+  .nh-photo{position:absolute;top:0;right:0;width:58%;height:100%;
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.18) 8%,#000 34%,#000 84%,rgba(0,0,0,.5) 100%);
+    mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.18) 8%,#000 34%,#000 84%,rgba(0,0,0,.5) 100%);}
   .nh-photo img{width:100%;height:100%;object-fit:cover;object-position:center 16%;}
-  .nh-net{position:absolute;inset:0;width:100%;height:100%;opacity:.5;}
+  .nh-net{position:absolute;inset:0;width:100%;height:100%;opacity:.62;}
   /* Sfumatura: piena a sinistra, completamente trasparente oltre il 68% */
   .nh-mask{position:absolute;inset:0;
     background:
@@ -162,7 +170,11 @@
   @keyframes nhUp{from{opacity:0;transform:translateY(26px);}to{opacity:1;transform:translateY(0);}}
   @media (max-width:900px){
     .nh{min-height:auto;padding:110px 0 70px;}
-    .nh-photo{width:100%;opacity:.3;}
+    /* Su mobile la foto sta dietro al testo: qui la sfumatura va dall'alto
+       verso il basso, cosi' l'immagine si dissolve nel fondo scuro. */
+    .nh-photo{width:100%;opacity:.3;
+      -webkit-mask-image:linear-gradient(180deg,#000 0,#000 52%,transparent 100%);
+      mask-image:linear-gradient(180deg,#000 0,#000 52%,transparent 100%);}
     .nh-mask{background:linear-gradient(0deg,#081426 20%,rgba(8,20,38,.88) 58%,rgba(8,20,38,.62));}
     .nh-in{padding:0;}
     .nh-nums{gap:26px;}
@@ -180,28 +192,58 @@
   var cv=document.getElementById('nhNet');
   var sec=document.getElementById('hero');
 
-  /* Rete di puntini: leggera (36 nodi) e messa in pausa quando la hero
-     esce dallo schermo, per non consumare batteria durante lo scroll. */
+  /* Particelle: puntini luminosi blu e verdi che salgono molto lentamente e si
+     collegano fra loro quando si avvicinano. L'alone di ogni puntino e' disegnato
+     UNA sola volta su una mini-canvas di servizio ("sprite") e poi ricopiato:
+     e' molto piu' leggero che ricalcolare un gradiente per ogni particella a ogni
+     fotogramma. L'animazione si ferma quando la hero esce dallo schermo. */
   if(cv&&cv.getContext&&!reduce){
     var ctx=cv.getContext('2d'),P=[],W=0,H=0,attiva=true,girando=false;
-    for(var i=0;i<36;i++)P.push({x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.00032,vy:(Math.random()-.5)*.00032});
+    var N=window.innerWidth<760?30:70;   /* meno particelle su telefono */
+    function sprite(col){
+      var s=document.createElement('canvas');s.width=s.height=64;
+      var c=s.getContext('2d'),g=c.createRadialGradient(32,32,0,32,32,32);
+      g.addColorStop(0,'rgba('+col+',.55)');
+      g.addColorStop(.35,'rgba('+col+',.16)');
+      g.addColorStop(1,'rgba('+col+',0)');
+      c.fillStyle=g;c.fillRect(0,0,64,64);return s;}
+    var ALO_BLU=sprite('150,205,255'), ALO_VERDE=sprite('124,205,140');
+    for(var i=0;i<N;i++)P.push({
+      x:Math.random(), y:Math.random(),
+      vx:(Math.random()-.5)*0.00020,                 /* deriva laterale minima */
+      vy:-(0.00010+Math.random()*0.00026),           /* salgono piano */
+      r:0.7+Math.random()*1.8,                       /* raggio del puntino */
+      a:0.20+Math.random()*0.45,                     /* trasparenza di base */
+      verde:Math.random()<0.40,                      /* 40% verdi, 60% azzurre */
+      f:Math.random()*6.283});                       /* sfasamento del respiro */
     function misura(){var r=cv.getBoundingClientRect();W=r.width;H=r.height;if(W<2||H<2)return false;
       var d=Math.min(window.devicePixelRatio||1,2),nw=Math.round(W*d),nh=Math.round(H*d);
       if(cv.width!==nw||cv.height!==nh){cv.width=nw;cv.height=nh;}
       ctx.setTransform(d,0,0,d,0,0);return true;}
-    function frame(){
+    function frame(now){
       if(!attiva){girando=false;return;}
       if(!misura()){requestAnimationFrame(frame);return;}
+      var t=now*0.001,i,j;
       ctx.clearRect(0,0,W,H);
-      var i,j;
+      /* movimento: chi esce da un bordo rientra dall'altro */
       for(i=0;i<P.length;i++){var p=P[i];p.x+=p.vx;p.y+=p.vy;
-        if(p.x<0||p.x>1)p.vx*=-1;if(p.y<0||p.y>1)p.vy*=-1;}
+        if(p.x<-0.03)p.x=1.03; else if(p.x>1.03)p.x=-0.03;
+        if(p.y<-0.03){p.y=1.03;p.x=Math.random();}}
+      /* fili di collegamento fra particelle vicine */
       for(i=0;i<P.length;i++){for(j=i+1;j<P.length;j++){
         var a=P[i],b=P[j],dx=(a.x-b.x)*W,dy=(a.y-b.y)*H,d2=dx*dx+dy*dy;
-        if(d2<22000){ctx.strokeStyle='rgba(91,168,90,'+(0.17*(1-d2/22000)).toFixed(3)+')';ctx.lineWidth=1;
+        if(d2<14000){ctx.strokeStyle='rgba(130,185,225,'+(0.11*(1-d2/14000)).toFixed(3)+')';ctx.lineWidth=1;
           ctx.beginPath();ctx.moveTo(a.x*W,a.y*H);ctx.lineTo(b.x*W,b.y*H);ctx.stroke();}}}
-      ctx.fillStyle='rgba(150,205,255,.5)';
-      for(i=0;i<P.length;i++){ctx.beginPath();ctx.arc(P[i].x*W,P[i].y*H,1.5,0,6.283);ctx.fill();}
+      /* alone + nucleo; "lighter" fa sommare le luci come luci vere */
+      ctx.globalCompositeOperation='lighter';
+      for(i=0;i<P.length;i++){var q=P[i],qx=q.x*W,qy=q.y*H;
+        var al=q.a*(0.70+0.30*Math.sin(t*0.8+q.f)), R=q.r*7;
+        ctx.globalAlpha=al;
+        ctx.drawImage(q.verde?ALO_VERDE:ALO_BLU,qx-R,qy-R,R*2,R*2);
+        ctx.globalAlpha=1;
+        ctx.fillStyle='rgba('+(q.verde?'150,225,165':'190,225,255')+','+al.toFixed(3)+')';
+        ctx.beginPath();ctx.arc(qx,qy,q.r,0,6.283);ctx.fill();}
+      ctx.globalCompositeOperation='source-over';
       requestAnimationFrame(frame);
     }
     function avvia(){if(!girando){girando=true;requestAnimationFrame(frame);}}
