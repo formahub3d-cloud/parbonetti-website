@@ -1180,6 +1180,40 @@ ul { list-style: none; }
 }
 
 /* =========================================================
+   MAPPE DELLE DUE SEDI (pagina contatti)
+   ========================================================= */
+.mappe-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.mappa-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: 0 4px 20px var(--shadow);
+  display: flex; flex-direction: column;
+}
+.mappa-card h3 { font-size: 1rem; margin: 10px 0 14px; color: var(--dark); }
+/* La mappa dentro la card: più bassa e senza ombra doppia */
+.mappa-card .map-wrap {
+  height: 300px; margin: 0;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: none;
+}
+.mappa-nota { font-size: 0.83rem; color: var(--gray); margin-top: 14px; line-height: 1.6; }
+.mappa-link {
+  margin-top: 12px; padding: 8px 0;
+  font-size: 0.88rem; font-weight: 600; color: var(--blue);
+  display: inline-flex; align-items: center; gap: 7px;
+  transition: var(--transition);
+}
+.mappa-link:hover { color: var(--green); gap: 11px; }
+
+@media (max-width: 860px) {
+  .mappe-grid { grid-template-columns: 1fr; gap: 22px; }
+  .mappa-card .map-wrap { height: 260px; }
+}
+
+/* =========================================================
    FAQ (pagina contatti)
    Accordion con <details>/<summary>: nessun JavaScript richiesto.
    ========================================================= */
