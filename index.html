@@ -145,12 +145,9 @@
     <div class="neuro-overlay">
       <p class="neuro-eyebrow" id="nEyebrow">Il sistema nervoso, in ogni dettaglio</p>
       <h2 class="neuro-title" id="nTitle">Neurochirurgia <span>d'Eccellenza</span></h2>
-      <p class="neuro-sub" id="nSub">Tecnologie di ultima generazione al servizio del cervello e della colonna vertebrale. Un riferimento nazionale per la neurochirurgia.</p>
-      <div class="neuro-stats">
-        <div class="neuro-stat" id="nStat0"><b>800+</b><span>Interventi ogni anno</span></div>
-        <div class="neuro-stat" id="nStat1"><b>15+</b><span>Aree di specializzazione</span></div>
-        <div class="neuro-stat" id="nStat2"><b>20+</b><span>Anni di esperienza</span></div>
-      </div>
+      <p class="neuro-sub" id="nSub">Tecnologie di ultima generazione al servizio del cervello e della colonna vertebrale.</p>
+      <!-- I numeri non vengono ripetuti qui: la sezione "L'eccellenza in numeri"
+           subito sotto è l'unico punto in cui compaiono, per evitare dati discordanti. -->
     </div>
   </div>
   <style>
@@ -215,7 +212,7 @@
     var progress=0;
     function computeProgress(){var r=scene.getBoundingClientRect(),total=scene.offsetHeight-window.innerHeight;progress=total>0?clamp01(-r.top/total):0;}
     function ov(id,v){var el=document.getElementById(id);if(el){el.style.opacity=v;el.style.transform='translateY('+((1-v)*22)+'px)';}}
-    function overlay(){ov('nEyebrow',seg(progress,0.05,0.16));ov('nTitle',seg(progress,0.10,0.24));ov('nSub',seg(progress,0.18,0.34));ov('nStat0',seg(progress,0.30,0.42));ov('nStat1',seg(progress,0.36,0.48));ov('nStat2',seg(progress,0.42,0.54));}
+    function overlay(){ov('nEyebrow',seg(progress,0.05,0.16));ov('nTitle',seg(progress,0.10,0.24));ov('nSub',seg(progress,0.18,0.34));}
     function glow(x,y,r,c){var g=ctx.createRadialGradient(x,y,0,x,y,r*3.5);g.addColorStop(0,'rgba('+c+',.9)');g.addColorStop(.4,'rgba('+c+',.4)');g.addColorStop(1,'rgba('+c+',0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r*3.5,0,6.283);ctx.fill();}
     var t0=performance.now();
     function frame(now){
@@ -481,7 +478,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2025 Dott. Giovanni Parbonetti – P.IVA 01757220627 – Tutti i diritti riservati</span>
+      <span>© 2026 Dott. Giovanni Parbonetti – P.IVA 01757220627 – Tutti i diritti riservati</span>
       <div class="footer-bottom-links">
         <a href="privacy.html">Privacy Policy</a>
         <a href="cookie.html">Cookie Policy</a>
