@@ -371,13 +371,24 @@
         var stretto=window.innerWidth<760;
         var LARG=stretto?3.5:4.15;                  /* larghezza in unita' scena */
         var k=LARG/(X1-X0), cxL=(X0+X1)/2, N=stretto?520:1250;
+        /* DA SAGOMA PIATTA A GUSCIO TRIDIMENSIONALE.
+           Se le mani restassero piatte, ruotando si ridurrebbero a una lama e
+           sembrerebbero due ali che sbattono. Qui la posizione orizzontale di
+           ogni pixel viene letta come un ANGOLO attorno allo stesso asse
+           verticale su cui gira il cervello: le mani diventano una coppa che
+           avvolge la scena. Girando, la loro sagoma resta piena da ogni lato.
+           TMAX = quanto si chiudono (55 gradi), RAG = raggio dell'abbraccio,
+           ZC  = quanto la coppa e' spostata in profondita'.                   */
+        var TMAX=0.96, RAG=stretto?2.00:2.35, ZC=stretto?1.70:2.00;
         for(var n=0;n<N;n++){
           var j=((Math.random()*(pts.length>>1))|0)*2;
-          var bx=(pts[j]-cxL)*k;
+          var u=(pts[j]-cxL)*k;                     /* posizione orizzontale */
           var by=(pts[j+1]-Y0)*k+0.42;              /* partono sotto al cervello */
-          /* le mani si incurvano verso chi guarda, come palme aperte */
-          var u=Math.min(1,Math.abs(bx)/(LARG*0.5));
-          var bz=0.55*Math.sin(Math.PI*u)+(Math.random()-.5)*0.12;
+          var th=(u/(LARG*0.5))*TMAX;               /* angolo attorno all'asse */
+          var Ri=RAG+(Math.random()-.5)*0.22;       /* spessore vero del guscio */
+          var bx=Ri*Math.sin(th);
+          var bz=ZC-Ri*Math.cos(th);                /* i polpastrelli vengono avanti */
+          by+=(Math.random()-.5)*0.05;
           var sh=0.72+0.28*Math.random();           /* variazione di grigio */
           MANI.push({bx:bx,by:by,bz:bz,r:0.75+Math.random()*1.05,
             a:0.26+Math.random()*0.30,
@@ -416,7 +427,9 @@
           var hx=mq.bx*cY-mq.bz*sY, hz=mq.bx*sY+mq.bz*cY;
           var hy=mq.by*cX-hz*sX, hz2=mq.by*sX+hz*cX;
           var hpe=4.2/(4.2-hz2), hsx=CX+hx*SC*hpe, hsy=CY+hy*SC*hpe;
-          var hal=mq.a*(0.55+0.45*((hz2+1.4)/2.6));
+          /* piu' contrasto fra vicino e lontano = piu' senso di volume,
+             stesso criterio usato per le particelle del cervello */
+          var hal=mq.a*(0.30+0.70*((hz2+1.4)/2.6));
           ctx.fillStyle='rgba('+mq.c+','+(hal*0.4).toFixed(3)+')';
           ctx.beginPath();ctx.arc(hsx,hsy,mq.r*hpe*2,0,6.283);ctx.fill();
           ctx.fillStyle='rgba('+mq.c+','+hal.toFixed(3)+')';
