@@ -112,7 +112,7 @@
   <div class="container">
     <div class="nh-in">
       <p class="nh-kicker">AORN San Pio · Benevento</p>
-      <h1 class="nh-title">Parbonetti<i>Neurochirurgo · Direttore UOC Neurochirurgia</i></h1>
+      <h1 class="nh-title">Dott. G. Parbonetti<i>Neurochirurgo · Direttore UOC Neurochirurgia</i></h1>
       <p class="nh-quote">Chirurgia del cervello e della colonna vertebrale con tecniche mini-invasive, neuronavigazione e monitoraggio neurofisiologico.</p>
       <div class="nh-nums">
         <div><b data-n="800">800+</b><span>Interventi / anno</span></div>
@@ -156,11 +156,15 @@
      così la foto resta luminosa ma il testo sopra il camice si legge bene. */
   .nh-in{position:relative;max-width:560px;padding:80px 0;text-shadow:0 2px 20px rgba(8,20,38,.8);}
   .nh-kicker{font-family:'Montserrat',sans-serif;font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--green);animation:nhUp .7s ease both;}
-  .nh-title{font-family:'Montserrat',sans-serif;font-weight:800;font-size:clamp(2.5rem,5.6vw,4.3rem);line-height:1;letter-spacing:-2px;color:#fff;margin:22px 0 0;animation:nhUp .85s ease .12s both;}
+  /* Corpo ridotto rispetto al solo cognome: "Dott. G. Parbonetti" e' lungo
+     19 caratteri e a 68px sfondava la colonna da 560px (misurato 651px).
+     A 56px sta su una riga sola da 1280px in su, e scala giu' fino a 32px
+     sul telefono senza mai andare a capo. */
+  .nh-title{font-family:'Montserrat',sans-serif;font-weight:800;font-size:clamp(2rem,4.6vw,3.5rem);line-height:1;letter-spacing:-2px;color:#fff;margin:22px 0 0;animation:nhUp .85s ease .12s both;}
   /* Sottotitolo: leggermente piu' piccolo, con interlinea propria (l'h1 ha
      line-height:1) e text-wrap:balance, cosi' su due righe non resta la parola
      "Neurochirurgia" orfana da sola in fondo. */
-  .nh-title i{font-style:normal;font-weight:400;display:block;font-size:.40em;line-height:1.25;text-wrap:balance;letter-spacing:1px;color:rgba(255,255,255,.8);margin-top:16px;}
+  .nh-title i{font-style:normal;font-weight:400;display:block;font-size:.46em;line-height:1.25;text-wrap:balance;letter-spacing:1px;color:rgba(255,255,255,.8);margin-top:16px;}
   .nh-quote{border-left:3px solid var(--green);padding-left:20px;margin-top:32px;font-size:1.02rem;line-height:1.75;color:rgba(255,255,255,.9);max-width:430px;animation:nhUp .85s ease .3s both;}
   .nh-nums{display:flex;gap:44px;margin-top:44px;flex-wrap:wrap;animation:nhUp .85s ease .45s both;}
   .nh-nums b{display:block;font-family:'Montserrat',sans-serif;font-size:2.3rem;font-weight:800;line-height:1;
