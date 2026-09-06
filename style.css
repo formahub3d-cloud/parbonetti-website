@@ -28,11 +28,11 @@
 /* ---------- RESET & BASE ---------- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* overflow-x: clip taglia la barra di scorrimento orizzontale creata dalle
-   animazioni .fade-left / .fade-right (che partono spostate di 32px ai lati).
-   Si usa "clip" e non "hidden" perche' hidden trasformerebbe <html> in un
-   contenitore di scorrimento e romperebbe il position:sticky della scena. */
-html { scroll-behavior: smooth; font-size: 16px; overflow-x: clip; }
+/* NON aggiungere overflow-x (ne' hidden ne' clip) su <html>: rende <html> un
+   contenitore di scorrimento e ROMPE il position:sticky della scena del
+   cervello (verificato il 6/9/2026). Il taglio orizzontale e' gia' garantito
+   da overflow-x:hidden su <body>, che si propaga alla finestra. */
+html { scroll-behavior: smooth; font-size: 16px; }
 
 body {
   font-family: 'Open Sans', sans-serif;
