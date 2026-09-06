@@ -216,18 +216,49 @@
       <h2 class="section-title">Come <span>Raggiungerci</span></h2>
       <div class="divider"></div>
     </div>
-    <div class="map-wrap fade-in">
-      <iframe
-        data-consent-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3018.2!2d14.7761!3d41.1309!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x133a4e1c3c7a1a1b%3A0x5a2f0d9b4c8e0a2b!2sAORN+San+Pio%2C+Via+dell&#39;Angelo%2C+Benevento+BN!5e0!3m2!1sit!2sit!4v1699999999999!5m2!1sit!2sit"
-        title="AORN San Pio – Presidio Rummo, Benevento"
-        allowfullscreen
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade">
-      </iframe>
+    <!-- Le mappe restano bloccate finché l'utente non accetta i cookie:
+         l'URL sta in data-consent-src e consent.js lo sposta su src dopo il consenso.
+         Formato URL: quello generato da Google stesso (pb=!1m3!2m1!1s<indirizzo>!6i<zoom>).
+         NON usare pb con place-ID inventati: Google restituisce un riquadro vuoto. -->
+    <div class="mappe-grid">
+
+      <div class="mappa-card fade-in">
+        <span class="struttura-tipo pubblica">Struttura Pubblica</span>
+        <h3>AORN San Pio – Presidio "Gaetano Rummo"</h3>
+        <div class="map-wrap">
+          <iframe
+            data-consent-src="https://www.google.com/maps/embed?origin=mfe&amp;pb=!1m3!2m1!1sVia+dell%27Angelo+1,+82100+Benevento+BN!6i16"
+            title="Mappa dell'AORN San Pio, Via dell'Angelo 1, Benevento"
+            allowfullscreen
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <p class="mappa-nota">Via Dell'Angelo 1, Benevento · III Piano, Padiglione Santa Teresa della Croce</p>
+        <a class="mappa-link" href="https://www.google.com/maps/search/?api=1&amp;query=Via%20dell%27Angelo%201%2C%2082100%20Benevento" target="_blank" rel="noopener">
+          Apri in Google Maps
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+
+      <div class="mappa-card fade-in">
+        <span class="struttura-tipo privata">Studio Privato</span>
+        <h3>Studio Medico Parbonetti</h3>
+        <div class="map-wrap">
+          <iframe
+            data-consent-src="https://www.google.com/maps/embed?origin=mfe&amp;pb=!1m3!2m1!1sVia+Salvator+Rosa+19,+82100+Benevento+BN!6i16"
+            title="Mappa dello Studio Medico Parbonetti, Via Salvator Rosa 19, Benevento"
+            allowfullscreen
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <p class="mappa-nota">Via Salvator Rosa 19, 82100 Benevento (BN)</p>
+        <a class="mappa-link" href="https://www.google.com/maps/search/?api=1&amp;query=Via%20Salvator%20Rosa%2019%2C%2082100%20Benevento" target="_blank" rel="noopener">
+          Apri in Google Maps
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+
     </div>
-    <p style="text-align:center; margin-top:16px; font-size:0.85rem; color:var(--gray);">
-      AORN San Pio – Presidio "Gaetano Rummo" · Via Dell'Angelo 1, Benevento · III Piano, Padiglione Santa Teresa della Croce
-    </p>
   </div>
 </section>
 
