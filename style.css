@@ -28,7 +28,11 @@
 /* ---------- RESET & BASE ---------- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; font-size: 16px; }
+/* overflow-x: clip taglia la barra di scorrimento orizzontale creata dalle
+   animazioni .fade-left / .fade-right (che partono spostate di 32px ai lati).
+   Si usa "clip" e non "hidden" perche' hidden trasformerebbe <html> in un
+   contenitore di scorrimento e romperebbe il position:sticky della scena. */
+html { scroll-behavior: smooth; font-size: 16px; overflow-x: clip; }
 
 body {
   font-family: 'Open Sans', sans-serif;
@@ -153,7 +157,10 @@ ul { list-style: none; }
   display: flex; align-items: center; gap: 12px;
   text-decoration: none;
 }
-.navbar-logo { height: 48px; width: auto; }
+/* aspect-ratio = proporzioni reali del file logo (700x535): cosi' il browser
+   riserva lo spazio giusto prima ancora di scaricare l'immagine e il nome
+   accanto al logo non "salta" al caricamento della pagina. */
+.navbar-logo { height: 48px; width: auto; aspect-ratio: 700 / 535; }
 .navbar-brand-text { font-family: 'Montserrat', sans-serif; }
 .navbar-brand-name {
   font-weight: 700; font-size: 1rem;
