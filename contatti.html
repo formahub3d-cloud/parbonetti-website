@@ -22,6 +22,74 @@
 
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/jpeg" href="PHOTO-2025-06-05-13-00-34.jpg" />
+
+  <!-- Dati strutturati FAQ: consentono a Google di mostrare le domande
+       direttamente nei risultati di ricerca. I testi devono restare
+       identici a quelli visibili nella sezione "Domande frequenti". -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Come prenoto una visita?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Con il Servizio Sanitario Nazionale si prenota tramite il CUP dell'AORN San Pio, 0824 1813010, con l'impegnativa del medico di base. In studio privato si prenota chiamando lo 389 066 3144 oppure compilando il modulo di contatto."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Che differenza c'è tra visita in SSN, intramoenia e privata?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "In SSN si prenota al CUP con l'impegnativa e si paga solo il ticket, se dovuto, e il medico viene assegnato dalla struttura. L'intramoenia è l'attività libero professionale svolta dentro l'ospedale: si sceglie il medico, i tempi sono di norma più brevi e la tariffa è a carico del paziente, stabilita dall'azienda ospedaliera. Lo studio privato prevede la visita in studio con tariffa privata."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Cosa devo portare alla prima visita?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "La documentazione clinica precedente, gli esami di imaging come risonanza, TC e radiografie possibilmente su CD o in originale e non soltanto il referto, l'elenco dei farmaci assunti segnalando in particolare anticoagulanti e antiaggreganti, gli esami del sangue recenti se disponibili, oltre a tessera sanitaria e impegnativa per le visite in SSN."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Devo per forza operarmi?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Molte patologie della colonna e del sistema nervoso vengono seguite senza ricorrere alla chirurgia, almeno in una prima fase. La visita serve a valutare se l'intervento sia indicato, quando e con quale tecnica, oppure se sia preferibile un percorso conservativo."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Posso chiedere un secondo parere?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sì, è una richiesta legittima e frequente. È utile portare tutta la documentazione già in proprio possesso e le immagini degli esami, così da poter valutare il caso senza doverli ripetere."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Quanto durano la degenza e il recupero?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Non esistono tempi validi per tutti: dipendono dalla patologia, dal tipo di intervento e dalle condizioni generali della persona. Vengono indicati caso per caso nel corso della visita e prima dell'eventuale intervento."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Il modulo di contatto va bene per le urgenze?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Il modulo serve per richieste non urgenti e le risposte non sono immediate. In caso di urgenza occorre chiamare il 118 o rivolgersi al Pronto Soccorso più vicino."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 <div class="scroll-progress" aria-hidden="true"></div>
@@ -281,6 +349,86 @@
           </p>
         </div>
       </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ======== DOMANDE FREQUENTI ========
+     Usa <details>/<summary> nativi: l'accordion funziona anche senza JavaScript
+     ed è leggibile dai motori di ricerca e dai lettori di schermo. -->
+<section class="section-pad bg-light" id="faq">
+  <div class="container">
+    <div class="section-header fade-in">
+      <h2 class="section-title">Domande <span>frequenti</span></h2>
+      <div class="divider"></div>
+      <p class="section-subtitle">Le informazioni pratiche più richieste prima di prenotare una visita</p>
+    </div>
+
+    <div class="faq-list">
+
+      <details class="faq-item fade-in">
+        <summary>Come prenoto una visita?</summary>
+        <div class="faq-answer">
+          Dipende dal regime scelto:
+          <ul>
+            <li><strong>Con il Servizio Sanitario Nazionale:</strong> tramite il CUP dell'AORN San Pio, <a href="tel:+3908241813010">0824 1813010</a>, con l'impegnativa del medico di base.</li>
+            <li><strong>In studio privato:</strong> chiamando lo <a href="tel:+393890663144">389 066 3144</a> o compilando il modulo qui sopra.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="faq-item fade-in">
+        <summary>Che differenza c'è tra visita in SSN, intramoenia e privata?</summary>
+        <div class="faq-answer">
+          <ul>
+            <li><strong>SSN:</strong> si prenota al CUP con l'impegnativa e si paga solo il ticket, se dovuto. Il medico che effettua la visita viene assegnato dalla struttura.</li>
+            <li><strong>Intramoenia:</strong> è l'attività libero professionale svolta dentro l'ospedale. Si sceglie il medico e i tempi sono di norma più brevi; la tariffa è a carico del paziente ed è stabilita dall'azienda ospedaliera.</li>
+            <li><strong>Studio privato:</strong> visita nello studio, con tariffa privata.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="faq-item fade-in">
+        <summary>Cosa devo portare alla prima visita?</summary>
+        <div class="faq-answer">
+          <ul>
+            <li>La documentazione clinica precedente (referti, lettere di dimissione).</li>
+            <li>Gli esami di imaging — risonanza, TC, radiografie — <strong>possibilmente le immagini su CD o in originale</strong>, non soltanto il referto scritto.</li>
+            <li>L'elenco dei farmaci che assume, segnalando in particolare <strong>anticoagulanti e antiaggreganti</strong>.</li>
+            <li>Gli esami del sangue recenti, se disponibili.</li>
+            <li>Tessera sanitaria e impegnativa, per le visite in SSN.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="faq-item fade-in">
+        <summary>Devo per forza operarmi?</summary>
+        <div class="faq-answer">
+          No. Molte patologie della colonna e del sistema nervoso vengono seguite senza ricorrere alla chirurgia, almeno in una prima fase. La visita serve proprio a valutare se l'intervento sia indicato, quando e con quale tecnica — oppure se sia preferibile un percorso conservativo.
+        </div>
+      </details>
+
+      <details class="faq-item fade-in">
+        <summary>Posso chiedere un secondo parere?</summary>
+        <div class="faq-answer">
+          Sì, è una richiesta legittima e frequente. È utile portare tutta la documentazione già in suo possesso e le immagini degli esami, così da poter valutare il caso senza doverli ripetere.
+        </div>
+      </details>
+
+      <details class="faq-item fade-in">
+        <summary>Quanto durano la degenza e il recupero?</summary>
+        <div class="faq-answer">
+          Non esistono tempi validi per tutti: dipendono dalla patologia, dal tipo di intervento e dalle condizioni generali della persona. Vengono indicati caso per caso nel corso della visita e prima dell'eventuale intervento.
+        </div>
+      </details>
+
+      <details class="faq-item fade-in">
+        <summary>Il modulo di contatto va bene per le urgenze?</summary>
+        <div class="faq-answer">
+          No. Il modulo serve per richieste non urgenti e le risposte non sono immediate. <strong>In caso di urgenza chiami il 118 o si rivolga al Pronto Soccorso più vicino.</strong>
+        </div>
+      </details>
 
     </div>
   </div>
