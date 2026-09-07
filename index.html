@@ -317,26 +317,81 @@
       CX=W*0.5;CY=H*0.42;SC=Math.min(W,H)*0.22;return true;}
     function rnd(a,b){return a+Math.random()*(b-a);}
     var P=[];
-    function hemi(sign,n,col){for(var i=0;i<n;i++){var u=Math.random(),v=Math.random();
-      var th=2*Math.PI*u,ph=Math.acos(2*v-1);
-      var x=Math.sin(ph)*Math.cos(th),y=Math.cos(ph),z=Math.sin(ph)*Math.sin(th);
-      var f=1+0.10*Math.sin(x*7+y*5)*Math.sin(z*6-y*4)+0.05*Math.sin(y*13+z*3);
-      var px=x*1.02*f,py=y*0.92*f,pz=z*1.12*f;
-      /* 0.16 = quanto ogni emisfero e' scostato dal centro: era 0.42 e lasciava
-         un vuoto largo nel mezzo. Il fattore 0.78 (era 0.62) compensa, cosi' il
-         cervello resta della stessa larghezza complessiva ma chiuso al centro,
-         con solo una linea sottile fra blu e verde come nel logo. */
-      px=sign*(0.16+Math.abs(px)*0.78);py=py*0.98+0.05;
-      var d=Math.random()<0.35?rnd(0.72,0.97):1;px*=d;py*=d;pz*=d;
-      var s=0.55+0.45*Math.random();
-      P.push({bx:px,by:py,bz:pz,sx:rnd(-6,6),sy:rnd(-6,6),sz:rnd(-6,6),r:col[0]*s|0,g:col[1]*s|0,b:col[2]*s|0,z2:rnd(0.9,2)});}}
-    function spine(){var top=0.9,bot=3.4,V=22;for(var i=0;i<=V;i++){var t=i/V;
-      var cy=top+t*(bot-top),cx=0.02+0.30*Math.sin(t*Math.PI*1.15),cz=0.05*Math.sin(t*6);
+    function clamp(v,a,b){return v<a?a:(v>b?b:v);}
+    /* ---- CORTECCIA -----------------------------------------------------
+       Non e' piu' una palla con un'increspatura: la superficie e' percorsa da
+       BANDE DI CRESTA E SOLCO (le circonvoluzioni). I punti vengono scartati
+       nei solchi e concentrati sulle creste — e' questo a far leggere "cervello"
+       e non "nuvola". In piu': fronte piu' stretta dell'occipite, base piu'
+       piatta, rigonfiamento del LOBO TEMPORALE in basso ai lati e la SCISSURA
+       DI SILVIO che lo stacca dal resto. Un quarto dei punti riempie il volume
+       interno, altrimenti la massa sembrerebbe vuota al centro.              */
+    function corteccia(sign,n,col){
+      var fatti=0, giri=0;
+      while(fatti<n && giri<n*40){
+        giri++;
+        var th=2*Math.PI*Math.random(), ph=Math.acos(2*Math.random()-1);
+        var x=Math.sin(ph)*Math.cos(th), y=Math.cos(ph), z=Math.sin(ph)*Math.sin(th);
+        var a=Math.atan2(z,x), b=Math.asin(clamp(y,-1,1));
+        var w=0.55*Math.sin(5.0*b+2.6*Math.sin(2.2*a+0.8*b))+0.45*Math.sin(7.0*a+2.0*Math.sin(1.8*b));
+        var cresta=1-Math.abs(w);
+        var dentro=Math.random()<0.26;
+        if(!dentro && Math.random()>0.16+0.84*Math.pow(cresta,1.6)) continue;
+        var r=(1+0.09*cresta)*(dentro?(0.55+0.37*Math.random()):1);
+        var X=x*1.00*r, Y=y*0.90*r, Z=z*1.12*r;
+        X*=1-0.12*Math.max(0,-Z);                 /* fronte piu' stretta */
+        if(Y>0.35) Y=0.35+(Y-0.35)*0.74;          /* base piu' piatta */
+        var bulbo=Math.exp(-((Y-0.46)*(Y-0.46))/0.05)*Math.exp(-((Z+0.10)*(Z+0.10))/0.55);
+        X+=(X>=0?1:-1)*0.14*bulbo; Y+=0.09*bulbo; /* lobo temporale */
+        var syl=Math.exp(-((Y-0.20-0.18*Z)*(Y-0.20-0.18*Z))/0.008);
+        if(Math.abs(X)>0.45 && Math.random()<0.80*syl) continue;   /* scissura */
+        /* 0.16 = scostamento dal centro: chiude il vuoto fra i due emisferi,
+           0.78 compensa perche' la larghezza totale resti la stessa */
+        var px=sign*(0.16+Math.abs(X)*0.78), py=Y*0.98+0.05;
+        var s=dentro?(0.30+0.22*Math.random()):(0.58+0.42*Math.random());
+        P.push({bx:px,by:py,bz:Z,sx:rnd(-6,6),sy:rnd(-6,6),sz:rnd(-6,6),
+                r:col[0]*s|0,g:col[1]*s|0,b:col[2]*s|0,
+                z2:dentro?rnd(0.8,1.3):rnd(1.0,2.0)});
+        fatti++;
+      }
+    }
+    /* ---- CERVELLETTO: massa piu' piccola dietro e in basso, con le sue
+       striature sottili (folia), molto piu' fitte delle circonvoluzioni ---- */
+    function cervelletto(sign,n,col){
+      var fatti=0, giri=0;
+      while(fatti<n && giri<n*30){
+        giri++;
+        var th=2*Math.PI*Math.random(), ph=Math.acos(2*Math.random()-1);
+        var x=Math.sin(ph)*Math.cos(th), y=Math.cos(ph), z=Math.sin(ph)*Math.sin(th);
+        var X=x*0.56, Y=y*0.30, Z=z*0.42;
+        if(Math.random()>0.15+0.85*Math.abs(Math.sin(20*Y))) continue;
+        var s=0.40+0.32*Math.random();
+        P.push({bx:sign*(0.10+Math.abs(X)*0.80),by:Y+0.66,bz:Z+0.86,
+                sx:rnd(-6,6),sy:rnd(-6,6),sz:rnd(-6,6),
+                r:col[0]*s|0,g:col[1]*s|0,b:col[2]*s|0,z2:rnd(0.9,1.6)});
+        fatti++;
+      }
+    }
+    /* ---- TRONCO ENCEFALICO: raccorda il cervello alla colonna ---- */
+    function tronco(n){
+      for(var i=0;i<n;i++){
+        var t=Math.random(), cy=0.44+t*0.56, rad=0.18-0.05*t;
+        var a=2*Math.PI*Math.random(), rr=rad*(0.7+0.3*Math.random()), s=0.6+0.4*Math.random();
+        P.push({bx:Math.cos(a)*rr,by:cy,bz:0.36+Math.sin(a)*rr*0.9,
+                sx:rnd(-6,6),sy:rnd(-6,6),sz:rnd(-6,6),
+                r:170*s|0,g:205*s|0,b:240*s|0,z2:rnd(1.0,1.8)});
+      }
+    }
+    /* la colonna parte dal tronco, quindi anche lei spostata indietro (bz +0.37) */
+    function spine(){var top=1.04,bot=3.5,V=22;for(var i=0;i<=V;i++){var t=i/V;
+      var cy=top+t*(bot-top),cx=0.02+0.30*Math.sin(t*Math.PI*1.15),cz=0.37+0.05*Math.sin(t*6);
       var ring=12+Math.round((1-t)*6),rad=0.30-0.10*t;
       for(var k=0;k<ring;k++){var a=2*Math.PI*k/ring,sh=0.6+0.4*Math.random();
         P.push({bx:cx+Math.cos(a)*rad,by:cy,bz:cz+Math.sin(a)*rad*0.85,sx:rnd(-6,6),sy:rnd(-6,6),sz:rnd(-6,6),r:175*sh|0,g:215*sh|0,b:255*sh|0,z2:rnd(0.9,1.7),cord:false});}
       P.push({bx:cx,by:cy,bz:cz,sx:rnd(-6,6),sy:rnd(-6,6),sz:rnd(-6,6),r:150,g:210,b:255,z2:rnd(1.4,2.3),cord:true});}}
-    hemi(-1,780,[70,150,230]);hemi(1,780,[110,205,120]);spine();
+    corteccia(-1,900,[70,150,230]);corteccia(1,900,[110,205,120]);
+    cervelletto(-1,175,[70,150,230]);cervelletto(1,175,[110,205,120]);
+    tronco(160);spine();
     var neu=[];for(var i=0;i<P.length;i+=13)neu.push(P[i]);
     var links=[];for(var a=0;a<neu.length;a++){var b1=-1,d1=9,b2=-1,d2=9;
       for(var b=0;b<neu.length;b++){if(a==b)continue;var dx=neu[a].bx-neu[b].bx,dy=neu[a].by-neu[b].by,dz=neu[a].bz-neu[b].bz,dd=dx*dx+dy*dy+dz*dz;
